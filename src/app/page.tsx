@@ -10,7 +10,7 @@ export default function Home(){
         alt="Kyle and Amanda"
         className="mt-4 "
       />
-      <p className="mt-4 text-2xl text-gray-600">June 14, 2024</p>
+      <p className="mt-4 text-2xl text-gray-600">June 14, 2025</p>
       <p className="mt-2 text-2xl text-gray-600">Kansas City, Missouri</p>
     </div>
   );
