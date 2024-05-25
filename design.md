@@ -2,7 +2,9 @@ floral design at the top of the page
 then our names
 then the date of the wedding
 
-home page has a bunch of nice photos of us and maybe we each write something for it too
+## home page
+a nice photo of us at the top with our names, then below that "We're getting Married!\r\nJune 14, 2025"
+it should also have 
 
 page with details of the event. when and where it is, where to park,
 
