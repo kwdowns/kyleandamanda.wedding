@@ -51,7 +51,7 @@ async function createCalendarEvent() {
     description: "Kyle and Amanda are getting married!",
     categories: [ "Wedding" ],
     location: "410 Admiral Boulevard, Kansas City, MO, 64106",
-    url: "https://kyleandamanda.com",
+    url: "https://kyleandamanda.wedding",
     geo: { lat: 39.10559152902085, lon: -94.57822280235453 },
     status: "CONFIRMED",
     busyStatus: "BUSY",
