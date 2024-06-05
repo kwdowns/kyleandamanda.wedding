@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, EB_Garamond } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { ReactNode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
+const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kyle and Amanda",
   description:
-    "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
+    "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City"
 };
 
 export default function RootLayout({
@@ -20,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <head>
+      <script src="http://localhost:8097"></script>
+      </head>
+      <body className={ebGaramond.className}>
         <HeaderLayout />    
         <main>{children}</main>
       </body>
