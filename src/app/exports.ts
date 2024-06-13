@@ -47,5 +47,5 @@ export const images = [
   zion_hike_1,
   zion_hike_2,
   zion_hike_3
-];
+].sort(() => Math.random());
 

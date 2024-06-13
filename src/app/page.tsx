@@ -20,7 +20,7 @@ export default function Home() {
       </div> 
       <div>
         <p className="mt-4 text-2xl">We&apos;re getting Married!</p>
-        <p className="mt-4 text-xl">June 14, 2025</p>
+        <p className="mt-4 text-2xl">June 14, 2025</p>
         <p className="mt-2 text-xl">Kansas City, Missouri</p>
         <p>{getDaysUntilWedding()} days until the big day!</p>
       </div>

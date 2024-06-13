@@ -1,21 +1,38 @@
+"use client";
 import React from "react";
-import Image from "next/image";
-
+import Image, { StaticImageData } from "next/image";
+import { PhotoAlbum, type RenderPhotoProps } from "react-photo-album";
 // Refresh this list of exports by running exports.ps1 in the root
 import * as gallery from "@/app/exports"
 
 export default function Gallery() {
   return (
-    <div className="mt-8 flex xs:flex-col flex-wrap gap-2 ml-2 mr-2">
-      {gallery.images.map((photo,i) => (
-          <Image
-            src={photo}
-            key={i}
-            alt=""
-            className="flex-auto w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
-          />
-        ))}
-    </div>
+      <PhotoAlbum
+        photos={gallery.images}
+        renderPhoto={NextJsImage}
+        layout="masonry"
+        defaultContainerWidth={800}
+        padding={30}
+        spacing={20}
+        targetRowHeight={400}
+        sizes={{
+          size: "calc(100vw-40px)",
+          sizes:[
+            { viewport: "(max-width: 299px)", size: "calc(100vw-10px)" },
+            { viewport: "(max-width: 599px)", size: "calc(100vw-20px)" },
+            { viewport: "(max-width: 1199px)", size: "calc(100vw-30px)" }
+          ]
+        }}
+      />
   );
 }
 
+function NextJsImage({ photo } : { photo: StaticImageData }) {
+  return (
+    <Image
+      src={photo}
+      alt=""
+      className="py-2"
+    />
+  );
+}
