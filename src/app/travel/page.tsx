@@ -1,15 +1,9 @@
-import Image, { StaticImageData } from "next/image";
+import { Metadata } from "next";
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: 'Travel | Kyle and Amanda'
+}
+
+export default function Travel() {
   return <h1>The wedding of kyle and amanda</h1>;
-}
-
-interface IReviewSectionProps {
-  title: string;
-  image: StaticImageData;
-  article: string;
-}
-
-function ReviewSection(props: IReviewSectionProps) {
-  return <div></div>;
 }
