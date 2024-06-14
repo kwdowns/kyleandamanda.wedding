@@ -26,9 +26,9 @@ export default function RootLayout({
         <main>{children}</main>
         <footer className="my-32">
           <KandAFooter />
+          <SpeedInsights />
         </footer>
       </body>
-      {/* Here is your hydration error: <SpeedInsights />*/}
     </html>
   );
 }
