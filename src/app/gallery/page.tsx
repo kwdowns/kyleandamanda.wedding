@@ -1,9 +1,10 @@
-"use client";
-import React from "react";
-// Refresh this list of exports by running exports.ps1 in the root
-import * as gallery from "@/data/exports";
-import PhotoGallery from "@/components/PhotoGallery";
-export default function Gallery() {
-  console.log(`loading gallery images`);
-  return <PhotoGallery photos={gallery.images} useLightbox={true} />;
+import { Metadata } from "next";
+import { GalleryView } from "./page.view";
+
+export const metadata: Metadata = {
+  title: "Gallery | Kyle and Amanda",
+};
+
+export default async function Gallery() {
+  return <GalleryView />;
 }
