@@ -4,5 +4,8 @@ import React from "react";
 import * as gallery from "@/app/exports";
 import PhotoGallery from "@/components/PhotoGallery";
 export default function Gallery() {
-  return <PhotoGallery />;
+  return <PhotoGallery 
+    photos={gallery.images}
+    useLightbox={true}
+  />;
 }

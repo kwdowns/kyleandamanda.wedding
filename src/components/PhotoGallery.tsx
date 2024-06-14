@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { PhotoAlbum } from "react-photo-album";
 import Lightbox, { RenderSlideProps, Slide } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import * as gallery from "@/app/exports";
 import {
   isImageFitCover,
   isImageSlide,
@@ -11,49 +10,67 @@ import {
   useLightboxState,
 } from "yet-another-react-lightbox";
 
-export default function PhotoGallery() {
-  const [open, setOpen] = React.useState(false);
+interface PhotoGalleryProps {
+  photos: StaticImageData[];
+  useLightbox: boolean;
+}
+
+export default function PhotoGallery( { photos, useLightbox }: PhotoGalleryProps) {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  
   return (
     <>
       <PhotoAlbum
-        photos={gallery.images}
+        photos={photos}
         renderPhoto={GalleryImage}
         layout="masonry"
-        defaultContainerWidth={800}
-        padding={30}
-        spacing={20}
-        targetRowHeight={400}
-        onClick={(click) => {
-          console.log(click.index);
+      />
+      {useLightbox && (
+        <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        index={lightboxIndex}
+        slides={photos.map((image) => ({ src: image.src }))}
+        render={{
+          slide: (props: RenderSlideProps<Slide>) => LightboxImage({ ...props, lookupStaticImageData: (src) => photos.find(photo => photo.src === src) }),
         }}
-        sizes={{
-          size: "calc(100vw-40px)",
-          sizes: [
-            { viewport: "(max-width: 299px)", size: "calc(100vw-10px)" },
-            { viewport: "(max-width: 599px)", size: "calc(100vw-20px)" },
-            { viewport: "(max-width: 1199px)", size: "calc(100vw-30px)" },
-          ],
+        on={{
+          view: (p) => {
+            setLightboxIndex(p.index)
+          }
         }}
       />
-      <Lightbox
-        open={open}
-        close={() => setOpen(false)}
-        slides={gallery.images.map((image) => ({ src: image.src }))}
-        render={{ slide: LightboxImage }}
-      />
+      )}
     </>
   );
 }
 
-function GalleryImage({ photo }: { photo: StaticImageData }) {
-  return <Image src={photo} alt="" className="py-2" />;
+interface GalleryImageProps {
+  photo: StaticImageData;
+}
+
+function GalleryImage({ photo }: GalleryImageProps) {
+  return (
+  <div
+    onClick={(e) => {
+      
+    }}
+  >
+    <Image src={photo} alt="" className="py-2" />
+  </div>);
+}
+
+interface LightboxImageProps extends RenderSlideProps<Slide>{
+  lookupStaticImageData: (src: string) => StaticImageData | undefined;
 }
 
 function LightboxImage({
   slide,
   offset,
   rect,
-}: RenderSlideProps<Slide>): React.JSX.Element | undefined {
+  lookupStaticImageData
+}: LightboxImageProps): React.JSX.Element | undefined {
 
   const {
     on: { click },
@@ -64,7 +81,7 @@ function LightboxImage({
 
   const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit);
 
-  const galleryImage = gallery.images.find((img) => img.src === slide.src);
+  const galleryImage = lookupStaticImageData(slide.src);
   if (!galleryImage) {
     return undefined;
   }
