@@ -52,7 +52,6 @@ export default function PhotoGallery({
           }
           return 4;
         }}
-        
       />
       {useLightbox && (
         <Lightbox

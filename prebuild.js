@@ -17,7 +17,10 @@ function generateGalleryImageExports() {
   });
 
   files.forEach((file) => {
-    const importPath = path.relative("./src/data", path.join(galleryPath, file));
+    const importPath = path.relative(
+      "./src/data",
+      path.join(galleryPath, file),
+    );
     const symbol = path.parse(file).name;
 
     imports += `import ${symbol} from '${importPath}';\r\n`;

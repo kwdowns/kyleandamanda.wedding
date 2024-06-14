@@ -20,17 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        
-      </head>
+      <head></head>
       <body className={ebGaramond.className}>
         <HeaderLayout />
         <main>{children}</main>
         <footer className="my-32">
-          <KandAFooter/>
+          <KandAFooter />
         </footer>
       </body>
-      <SpeedInsights />  
+      <SpeedInsights />
     </html>
   );
 }
@@ -54,20 +52,19 @@ const NavBarLayout = () => {
   );
 };
 
-function HeaderLayout() {
+const HeaderLayout = () => {
   return (
     <header className="bg-gray-200 p-4">
       <NavBarLayout />
     </header>
   );
-}
+};
 
 const KandAFooter = () => {
   return (
-    
     <div className="text-center mx-auto my-4 w-fit">
       <div className="text-4xl">K & A</div>
       <div className="text-xl border-t-2 border-t-green-800">6 . 14 . 2025</div>
     </div>
-  )
-}
+  );
+};
