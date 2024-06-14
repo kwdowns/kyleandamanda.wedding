@@ -7,7 +7,7 @@ function generateGalleryImageExports() {
   let imports = "";
   let exports = "export const images = [";
   const galleryPath = "./public/gallery";
-  const exportsFilePath = "./src/app/exports.ts";
+  const exportsFilePath = "./src/data/galleryImages.ts";
 
   fs.writeFileSync(exportsFilePath, "");
 
@@ -17,7 +17,7 @@ function generateGalleryImageExports() {
   });
 
   files.forEach((file) => {
-    const importPath = path.relative("./src/app", path.join(galleryPath, file));
+    const importPath = path.relative("./src/data", path.join(galleryPath, file));
     const symbol = path.parse(file).name;
 
     imports += `import ${symbol} from '${importPath}';\r\n`;

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-import { ReactNode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,11 +20,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        
+      </head>
       <body className={ebGaramond.className}>
         <HeaderLayout />
         <main>{children}</main>
+        <footer className="my-32">
+          <KandAFooter/>
+        </footer>
       </body>
+      <SpeedInsights />  
     </html>
   );
 }
@@ -35,9 +40,6 @@ const NavBarLayout = () => {
     <nav className={`bg-gray-200 p-4 flex justify-around ${inter.className}`}>
       <Link href="/" className="text-gray-700">
         Home
-      </Link>
-      <Link href="/ceremony" className="text-gray-700">
-        Ceremony
       </Link>
       <Link href="/gallery" className="text-gray-700">
         Gallery
@@ -58,4 +60,14 @@ function HeaderLayout() {
       <NavBarLayout />
     </header>
   );
+}
+
+const KandAFooter = () => {
+  return (
+    
+    <div className="text-center mx-auto my-4 w-fit">
+      <div className="text-4xl">K & A</div>
+      <div className="text-xl border-t-2 border-t-green-800">6 . 14 . 2025</div>
+    </div>
+  )
 }
