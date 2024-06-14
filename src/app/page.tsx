@@ -23,11 +23,10 @@ export default function Home() {
   );
 }
 
-// const weddingDate = new Date("2025-06-14T20:00:00Z");
+const weddingDate = new Date("2025-06-14T20:00:00Z");
 
 function getDaysUntilWedding() {
-  // const today = new Date();
-  // const diffTime = weddingDate.getTime() - today.getTime();
-  //return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return 365;
+  const today = new Date();
+  const diffTime = weddingDate.getTime() - today.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
