@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { MouseEventHandler, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { PhotoAlbum } from "react-photo-album";
 import Lightbox, { RenderSlideProps, Slide } from "yet-another-react-lightbox";
@@ -23,7 +24,7 @@ export default function PhotoGallery( { photos, useLightbox }: PhotoGalleryProps
     <>
       <PhotoAlbum
         photos={photos}
-        renderPhoto={GalleryImage}
+        renderPhoto={(props) => GalleryImage({...props, onClick: () => { setLightboxOpen(true); setLightboxIndex(photos.findIndex(photo => photo.src === props.photo.src))}})}
         layout="masonry"
       />
       {useLightbox && (
@@ -48,14 +49,13 @@ export default function PhotoGallery( { photos, useLightbox }: PhotoGalleryProps
 
 interface GalleryImageProps {
   photo: StaticImageData;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-function GalleryImage({ photo }: GalleryImageProps) {
+function GalleryImage({ photo, onClick }: GalleryImageProps) {
   return (
   <div
-    onClick={(e) => {
-      
-    }}
+    onClick={onClick}
   >
     <Image src={photo} alt="" className="py-2" />
   </div>);
