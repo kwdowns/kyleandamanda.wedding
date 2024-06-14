@@ -87,7 +87,7 @@ interface GalleryImageProps {
 function GalleryImage({ photo, onClick }: GalleryImageProps) {
   return (
     <div onClick={onClick}>
-      <Image src={photo} alt="" className="py-4" />
+      <Image src={photo} alt="" className="py-2" />
     </div>
   );
 }
