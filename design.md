@@ -3,8 +3,9 @@ then our names
 then the date of the wedding
 
 ## home page
+
 a nice photo of us at the top with our names, then below that "We're getting Married!\r\nJune 14, 2025"
-it should also have 
+it should also have
 
 page with details of the event. when and where it is, where to park,
 

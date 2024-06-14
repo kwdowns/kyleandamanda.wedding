@@ -11,7 +11,7 @@ const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Kyle and Amanda",
   description:
-    "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City"
+    "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
 };
 
 export default function RootLayout({
@@ -21,11 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-      
-      </head>
+      <head></head>
       <body className={ebGaramond.className}>
-        <HeaderLayout />    
+        <HeaderLayout />
         <main>{children}</main>
       </body>
     </html>
@@ -34,33 +32,30 @@ export default function RootLayout({
 
 const NavBarLayout = () => {
   return (
-      <nav className={`bg-gray-200 p-4 flex justify-around ${inter.className}`}>
-        <Link href="/" className="text-gray-700">
-          Home
-        </Link>
-        <Link href="/ceremony" className="text-gray-700">
-          Ceremony
-        </Link>
-        <Link href="/gallery" className="text-gray-700">
-          Gallery
-        </Link>
-        <Link href="/registry" className="text-gray-700">
-          Registry
-        </Link>
-        <Link href="/rsvp" className="text-gray-700">
-          RSVP
-        </Link>
-      </nav>
+    <nav className={`bg-gray-200 p-4 flex justify-around ${inter.className}`}>
+      <Link href="/" className="text-gray-700">
+        Home
+      </Link>
+      <Link href="/ceremony" className="text-gray-700">
+        Ceremony
+      </Link>
+      <Link href="/gallery" className="text-gray-700">
+        Gallery
+      </Link>
+      <Link href="/registry" className="text-gray-700">
+        Registry
+      </Link>
+      <Link href="/rsvp" className="text-gray-700">
+        RSVP
+      </Link>
+    </nav>
   );
 };
-
-
 
 function HeaderLayout() {
   return (
     <header className="bg-gray-200 p-4">
-        <NavBarLayout />
+      <NavBarLayout />
     </header>
   );
 }
-
