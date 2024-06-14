@@ -54,10 +54,6 @@ function LightboxImage({
   offset,
   rect,
 }: RenderSlideProps<Slide>): React.JSX.Element | undefined {
-  const galleryImage = gallery.images.find((img) => img.src === slide.src);
-  if (!galleryImage) {
-    return undefined;
-  }
 
   const {
     on: { click },
@@ -68,30 +64,35 @@ function LightboxImage({
 
   const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit);
 
-  // const width = !cover
-  //   ? Math.round(
-  //       Math.min(
-  //         rect.width,
-  //         (rect.height / galleryImage.height) * galleryImage.width,
-  //       ),
-  //     )
-  //   : rect.width;
+  const galleryImage = gallery.images.find((img) => img.src === slide.src);
+  if (!galleryImage) {
+    return undefined;
+  }
 
-  // const height = !cover
-  //   ? Math.round(
-  //       Math.min(
-  //         rect.height,
-  //         (rect.width / galleryImage.width) * galleryImage.height,
-  //       ),
-  //     )
-  //   : rect.height;
+  const width = !cover
+    ? Math.round(
+        Math.min(
+          rect.width,
+          (rect.height / galleryImage.height) * galleryImage.width,
+        ),
+      )
+    : rect.width;
+
+  const height = !cover
+    ? Math.round(
+        Math.min(
+          rect.height,
+          (rect.width / galleryImage.width) * galleryImage.height,
+        ),
+      )
+    : rect.height;
 
   return (
     <div
       style={{
         position: "relative",
-        // width,
-        //height
+        width,
+        height
       }}
     >
       <Image
@@ -101,7 +102,7 @@ function LightboxImage({
           objectFit: cover ? "cover" : "contain",
           cursor: click ? "pointer" : undefined,
         }}
-        // sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
+        sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
         onClick={
           offset === 0 ? () => click?.({ index: currentIndex }) : undefined
         }
