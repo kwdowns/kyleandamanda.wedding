@@ -26,7 +26,7 @@ interface IFaqItemProps extends Faq {}
 function FaqItem({ question, answer }: IFaqItemProps) {
   if (answer) {
     return (
-      <div className="py-4 border-b">
+      <div className="py-4 border-b text-pretty">
         <h4 className="text-xl font-bold text-left">{question}</h4>
         <p className="text-left pt-4">{answer}</p>
       </div>
