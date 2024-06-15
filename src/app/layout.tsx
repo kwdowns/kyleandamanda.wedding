@@ -37,7 +37,7 @@ export default function RootLayout({
 
 const NavBarLayout = () => {
   return (
-    <nav className={`flex justify-around ${inter.className}`}>
+    <nav className={`flex justify-around ${inter.className} text-bold`}>
       <Link href="/" className="">
         Home
       </Link>
