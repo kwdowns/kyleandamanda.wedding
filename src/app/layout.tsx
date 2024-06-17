@@ -21,8 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head></head>
-      <body className={`${ebGaramond.className} bg-gradient-to-b from-secondary from-0% to-transparent to-20%`}>
-        <div className="bg-gradient-to-t from-primary from-0% to-transparent to-20% vh-max">
+      <body className={`${ebGaramond.className} `}> {/*bg-gradient-to-b from-secondary from-0% to-transparent to-20%*/}
+      
+        <div className="bg-gradient-to-t from-primary from-0% to-transparent to-15% vh-max">
         <HeaderLayout />
         <main>{children}</main>
         <footer className="py-36">
@@ -44,10 +45,10 @@ const NavBarLayout = () => {
       <Link href="/gallery" className="">
         Gallery
       </Link>
-      <Link href="/registry" className="">
+      <Link href="/registry" className="hidden">
         Registry
       </Link>
-      <Link href="/rsvp" className="">
+      <Link href="/rsvp" className="hidden">
         RSVP
       </Link>
     </nav>
