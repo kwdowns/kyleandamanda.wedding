@@ -1,10 +1,8 @@
-'use client'
+"use client";
 
 import PhotoGallery from "@/components/PhotoGallery";
-import { images } from '@/data/exports'
+import { images } from "@/data/exports";
 
 export function GalleryView() {
-    return (
-        <PhotoGallery photos={images} useLightbox={true} />
-    )
+  return <PhotoGallery photos={images} useLightbox={true} />;
 }

@@ -21,15 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head></head>
-      <body className={`${ebGaramond.className} `}> {/*bg-gradient-to-b from-secondary from-0% to-transparent to-20%*/}
-      
-        <div className="bg-gradient-to-t from-primary from-0% to-transparent to-15% vh-max">
-        <HeaderLayout />
-        <main>{children}</main>
-        <footer className="py-36">
-          <KandAFooter />
-          <SpeedInsights />
-        </footer>
+      <body className={`${ebGaramond.className} `}>
+        {" "}
+        {/*bg-gradient-to-b from-secondary from-0% to-transparent to-20%*/}
+        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max">
+          <HeaderLayout />
+          <main>{children}</main>
+          <footer className="py-36">
+            <KandAFooter />
+            <SpeedInsights />
+          </footer>
         </div>
       </body>
     </html>
@@ -38,7 +39,7 @@ export default function RootLayout({
 
 const NavBarLayout = () => {
   return (
-    <nav className={`flex justify-around ${inter.className} text-bold`}>
+    <nav className={`flex justify-around ${inter.className}`}>
       <Link href="/" className="">
         Home
       </Link>
@@ -57,7 +58,7 @@ const NavBarLayout = () => {
 
 const HeaderLayout = () => {
   return (
-    <header className="bg-primary text-secondary px-7 py-6">
+    <header className="bg-accent text-white px-7 py-6">
       <NavBarLayout />
     </header>
   );
@@ -65,9 +66,9 @@ const HeaderLayout = () => {
 
 const KandAFooter = () => {
   return (
-    <div className="text-center mx-auto my-4 w-fit text-accent">
+    <div className="text-center mx-auto my-4 w-fit text-tertiary">
       <div className="text-4xl">K & A</div>
-      <div className="text-xl border-t-2 border-t-accent">6 . 14 . 2025</div>
+      <div className="text-xl border-t-2 border-t-tertiary">6 . 14 . 2025</div>
     </div>
   );
 };

@@ -128,7 +128,6 @@ async function createCalendarEvent() {
 }
 
 export default function RSVPView() {
-
   return (
     <>
       <RsvpForm
@@ -141,4 +140,3 @@ export default function RSVPView() {
     </>
   );
 }
-
