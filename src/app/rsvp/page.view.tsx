@@ -1,84 +1,104 @@
-"use client";
+"use client"
+import { AttendingStatus, submitRsvpInvite, updateRsvpInvite} from "../client/rsvp";
+import { useState } from "react";
 
-import { EventAttributes, createEvent } from "ics";
-import { useEffect, useState } from "react";
-type Attendee = {
-  name: string;
-  food_preference: string;
-};
 interface RsvpFormProps {
   name: string;
-  attending: boolean;
-  food_preference:
-    | "none"
-    | "vegan"
-    | "vegetarian"
-    | "gluten-free"
-    | "peanut-allergy"
-    | "dairy-allergy";
-  guests: string | null;
-  invite_id: string | null;
+  attendingStatus: AttendingStatus;
+  foodPreference: string | null;
+  guests: string[] | null;
+  inviteId: string | null;
+  comments: string | null;
+  inviteCount: number;
 }
 
-async function submitForm(props: RsvpFormProps) {
-  console.log("received form submission:", props);
-  // try {
-  //   const response = await fetch('/api/submitForm', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(props),
-  //   });
-  //   if (response.ok) {
-  //     alert('Form submitted successfully!');
-  //   } else {
-  //     throw new Error('Form submission failed.');
-  //   }
-  // } catch (error) {
-  //   console.error('Error submitting form:', error);
-  //   alert('An error occurred while submitting the form. Please try again later.');
-  // }
-}
+function RsvpForm(props: RsvpFormProps) {
+  const [name, setName] = useState(props.name);
+  const [isAttending, setIsAttending] = useState(props.attendingStatus == "Attending");
+  const [foodPreference, setFoodPreference] = useState(props.foodPreference);
+  const [guests, setGuests] = useState(props.guests);
+  const [comments, setComments] = useState(props.comments);
+  const [rsvpCode, setRsvpCode] = useState(props.inviteId);
 
-function RsvpForm(formProps: RsvpFormProps) {
-  const [props, setProps] = useState<RsvpFormProps>(formProps);
-  return (
-    <form>
+  const guestCount = Math.max(guests?.length ?? 0, props.inviteCount);
+
+  return (<form>
       <label>Name:</label>
       <input
         type="text"
-        value={props.name}
-        onChange={(e) => setProps({ ...props, name: e.target.value })}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
 
       <label>Attending:</label>
       <input
         type="checkbox"
-        checked={props.attending}
-        onChange={(e) => setProps({ ...props, attending: e.target.checked })}
+        checked={isAttending}
+        onChange={(e) => setIsAttending(e.target.checked)}
       />
 
       <label>Food Preference:</label>
-      <select
-        value={props.food_preference}
-        onChange={(e) =>
-          setProps({
-            ...props,
-            food_preference: e.target.value as RsvpFormProps["food_preference"],
-          })
-        }
-      ></select>
-
-      <label>Guests:</label>
       <input
         type="text"
-        onChange={(e) => setProps({ ...props, guests: e.target.value })}
+        value={foodPreference ?? ""}
+        onChange={(e) => setFoodPreference(e.target.value)}
+      ></input>
+
+      <div>
+        <p>Additional Guests</p>
+        {Array.from({ length: guestCount }).map((_, i) => (
+          (<input
+            key={i}
+            type="text"
+            value={guests?.[i] ?? ""}
+            onChange={(e) => {
+              const newGuests = guests ? [...guests] : [];
+              newGuests[i] = e.target.value;
+              setGuests(newGuests);
+            }}
+          />)
+        ))}
+      </div>
+      <input
+        type="text"
+        value={comments ?? ""}
+        onChange={(e) => setComments(e.target.value)}
       />
 
-      {props.invite_id && <input type="hidden" value={props.invite_id} />}
+      {rsvpCode && <input type="hidden" value={rsvpCode} />}
 
-      <button onClick={async () => await submitForm(props)}>Submit</button>
+      <button 
+        onClick={async () => {
+          if(rsvpCode){
+            await updateRsvpInvite({
+              rsvpCode: rsvpCode,
+              body: {
+                guestName: name,
+                attendingStatus: isAttending ? "Attending" : "Declined",
+                inviteCount: guestCount,
+                additionalGuestNames: guests ?? [],
+                foodPreference: foodPreference ?? "",
+                comments: comments ?? "",
+              }
+            });
+          }
+          else{
+            const newRsvpCode = await submitRsvpInvite({
+              body: {
+                guestName: name,
+                attendingStatus: isAttending ? "Attending" : "Declined",
+                inviteCount: guestCount,
+                additionalGuestNames: guests ?? [],
+                foodPreference: foodPreference ?? "",
+                comments: comments ?? "",
+              }
+            });
+            setRsvpCode(newRsvpCode);
+          }
+        }}
+      >
+        Submit
+      </button>
     </form>
   );
 }
@@ -127,16 +147,10 @@ async function createCalendarEvent() {
   }
 }
 
-export default function RSVPView() {
+export default function RsvpView(rsvp : RsvpFormProps){
   return (
     <>
-      <RsvpForm
-        name=""
-        attending={false}
-        food_preference="none"
-        guests={null}
-        invite_id={null}
-      />
+      <RsvpForm {...rsvp} />
     </>
-  );
+  )
 }
