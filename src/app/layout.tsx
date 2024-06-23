@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`${ebGaramond.className} `}>
         {" "}
         {/*bg-gradient-to-b from-secondary from-0% to-transparent to-20%*/}
-        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max">
+        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary">
           <HeaderLayout />
           <main>{children}</main>
           <footer className="py-36">
@@ -66,9 +66,9 @@ const HeaderLayout = () => {
 
 const KandAFooter = () => {
   return (
-    <div className="text-center mx-auto my-4 w-fit text-tertiary">
+    <div className="text-center mx-auto my-4 w-fit text-black">
       <div className="text-4xl">K & A</div>
-      <div className="text-xl border-t-2 border-t-tertiary">6 . 14 . 2025</div>
+      <div className="text-xl border-t-2 border-t-black">6 . 14 . 2025</div>
     </div>
   );
 };
