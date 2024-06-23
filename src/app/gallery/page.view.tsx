@@ -1,8 +1,8 @@
 "use client";
 
 import PhotoGallery from "@/components/PhotoGallery";
-import { images } from "@/data/exports";
+import { images, engagement_photos } from '../../data/galleryImages';
 
 export function GalleryView() {
-  return <PhotoGallery photos={images} useLightbox={true} />;
+  return <PhotoGallery photos={images.concat(engagement_photos)} useLightbox={true} />;
 }

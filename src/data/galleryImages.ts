@@ -21,6 +21,19 @@ import img_gallery_f94d27eeee9442dbb981b58d997d816f from '../../public/gallery/i
 import img_gallery_f97563e33ec04c3186f55a113a5f0034 from '../../public/gallery/img_gallery_f97563e33ec04c3186f55a113a5f0034.jpg';
 import img_gallery_f9b9a2cb405f4c8998f0e43d081b17f8 from '../../public/gallery/img_gallery_f9b9a2cb405f4c8998f0e43d081b17f8.jpg';
 import img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a from '../../public/gallery/img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a.jpg';
+import EB9A4386 from '../../public/gallery/engagement_photos/EB9A4386.jpg';
+import EB9A4386_2 from '../../public/gallery/engagement_photos/EB9A4386_2.jpg';
+import EB9A4494 from '../../public/gallery/engagement_photos/EB9A4494.jpg';
+import EB9A4548 from '../../public/gallery/engagement_photos/EB9A4548.jpg';
+import EB9A4548_2 from '../../public/gallery/engagement_photos/EB9A4548_2.jpg';
+import EB9A4640 from '../../public/gallery/engagement_photos/EB9A4640.jpg';
+import EB9A4913 from '../../public/gallery/engagement_photos/EB9A4913.jpg';
+import EB9A5097 from '../../public/gallery/engagement_photos/EB9A5097.jpg';
+import EB9A5097_2 from '../../public/gallery/engagement_photos/EB9A5097_2.jpg';
+import EB9A5241 from '../../public/gallery/engagement_photos/EB9A5241.jpg';
+import EB9A5285 from '../../public/gallery/engagement_photos/EB9A5285.jpg';
+import EB9A5285_2 from '../../public/gallery/engagement_photos/EB9A5285_2.jpg';
+import EB9A5326 from '../../public/gallery/engagement_photos/EB9A5326.jpg';
 
 
 export const images = [
@@ -45,4 +58,21 @@ export const images = [
   img_gallery_f97563e33ec04c3186f55a113a5f0034,
   img_gallery_f9b9a2cb405f4c8998f0e43d081b17f8,
   img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a
+];
+
+
+export const engagement_photos = [
+ EB9A4386,
+ EB9A4386_2,
+ EB9A4494,
+ EB9A4548,
+ EB9A4548_2,
+ EB9A4640,
+ EB9A4913,
+ EB9A5097,
+ EB9A5097_2,
+ EB9A5241,
+ EB9A5285,
+ EB9A5285_2,
+ EB9A5326
 ];
