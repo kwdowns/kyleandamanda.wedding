@@ -1,8 +1,10 @@
 "use client"
-import { AttendingStatus, submitRsvpInvite, updateRsvpInvite} from "../client/rsvp";
+import { EventAttributes, createEvent } from "ics";
+import { AttendingStatus, SubmitRsvpRequestBody, UpdateRsvpRequestBody } from "../../client/rsvp";
 import { useState } from "react";
 
-interface RsvpFormProps {
+
+export interface RsvpFormProps {
   name: string;
   attendingStatus: AttendingStatus;
   foodPreference: string | null;
@@ -14,7 +16,7 @@ interface RsvpFormProps {
 
 function RsvpForm(props: RsvpFormProps) {
   const [name, setName] = useState(props.name);
-  const [isAttending, setIsAttending] = useState(props.attendingStatus == "Attending");
+  const [attendingStatus, setAttendingStatus] = useState(props.attendingStatus);
   const [foodPreference, setFoodPreference] = useState(props.foodPreference);
   const [guests, setGuests] = useState(props.guests);
   const [comments, setComments] = useState(props.comments);
@@ -22,7 +24,75 @@ function RsvpForm(props: RsvpFormProps) {
 
   const guestCount = Math.max(guests?.length ?? 0, props.inviteCount);
 
-  return (<form>
+  async function submitRsvpInvite(request: SubmitRsvpRequestBody): Promise<string>{
+    const response = await fetch(`/api/rsvp`, {
+      body: JSON.stringify(request),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if(response.status != 200){
+      throw new Error(`Failed to submit RSVP: ${response.statusText}`);
+    }
+
+    const responseBody = await response.json();
+
+    return responseBody.rsvpCode;
+  }
+
+  async function updateRsvpInvite(request: { rsvpCode: string, body: UpdateRsvpRequestBody }){
+    const response = await fetch(`/api/rsvp/${request.rsvpCode}`, {
+      body: JSON.stringify(request.body),
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if(response.status != 200){
+      throw new Error(`Failed to update RSVP: ${response.statusText}`);
+    }
+  }
+
+  async function submitRsvp(){
+    if(rsvpCode){
+      console.log("updating rsvp");
+      await updateRsvpInvite({
+        rsvpCode: rsvpCode,
+        body: {
+          guestName: name,
+          attending: attendingStatus === "Attending",
+          inviteCount: guestCount,
+          additionalGuestNames: guests ?? [],
+          foodPreference: foodPreference ?? "",
+          comments: comments ?? "",
+        }
+      });
+    }
+    else{
+      console.log("updating rsvp");
+      const newRsvpCode = await submitRsvpInvite({
+          guestName: name,
+          attending: attendingStatus === "Attending",
+          inviteCount: guestCount,
+          additionalGuestNames: guests ?? [],
+          foodPreference: foodPreference ?? "",
+          comments: comments ?? "",
+        }
+      );
+      setRsvpCode(newRsvpCode);
+    }
+  }
+
+  return (
+    <>
+    <h1> RSVP </h1>
+    {rsvpCode && attendingStatus === "AwaitingResponse" && <p>rsvp not yet submitted</p>}
+    {rsvpCode && attendingStatus !== "AwaitingResponse" && <p>rsvp previously submitted, editing</p>}
+    {!rsvpCode && <p>new rsvp</p>}
+    <div>
       <label>Name:</label>
       <input
         type="text"
@@ -33,8 +103,8 @@ function RsvpForm(props: RsvpFormProps) {
       <label>Attending:</label>
       <input
         type="checkbox"
-        checked={isAttending}
-        onChange={(e) => setIsAttending(e.target.checked)}
+        checked={attendingStatus == "Attending"}
+        onChange={(e) => setAttendingStatus(e.target.checked ? "Attending" : "Declined")}
       />
 
       <label>Food Preference:</label>
@@ -67,39 +137,13 @@ function RsvpForm(props: RsvpFormProps) {
 
       {rsvpCode && <input type="hidden" value={rsvpCode} />}
 
-      <button 
-        onClick={async () => {
-          if(rsvpCode){
-            await updateRsvpInvite({
-              rsvpCode: rsvpCode,
-              body: {
-                guestName: name,
-                attendingStatus: isAttending ? "Attending" : "Declined",
-                inviteCount: guestCount,
-                additionalGuestNames: guests ?? [],
-                foodPreference: foodPreference ?? "",
-                comments: comments ?? "",
-              }
-            });
-          }
-          else{
-            const newRsvpCode = await submitRsvpInvite({
-              body: {
-                guestName: name,
-                attendingStatus: isAttending ? "Attending" : "Declined",
-                inviteCount: guestCount,
-                additionalGuestNames: guests ?? [],
-                foodPreference: foodPreference ?? "",
-                comments: comments ?? "",
-              }
-            });
-            setRsvpCode(newRsvpCode);
-          }
-        }}
-      >
+      <div 
+        className={"bg-tertiary text-white p-2 rounded w-fit"}
+        onClick={submitRsvp}>
         Submit
-      </button>
-    </form>
+      </div>
+    </div>
+    </>
   );
 }
 

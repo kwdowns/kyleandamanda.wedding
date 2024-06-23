@@ -12,7 +12,7 @@ export type RsvpInviteModel = {
 }
 export type SubmitRsvpRequestBody = {
   guestName: string;
-  attendingStatus: AttendingStatus;
+  attending: boolean;
   inviteCount: number;
   additionalGuestNames: string[];
   foodPreference: string;
@@ -38,8 +38,8 @@ export async function getRsvpInvite(rsvpCode: string): Promise<RsvpInviteModel |
   else if(response.status != 200){
     throw new Error(`Failed to fetch RSVP invite: ${response.statusText}`);
   }
-  
-  const rsvpModel : RsvpInviteModel = await response.json();
+
+  const rsvpModel : RsvpInviteModel = await response.json() as RsvpInviteModel;
   return rsvpModel;  
 }
 
