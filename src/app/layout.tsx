@@ -27,7 +27,7 @@ export default function RootLayout({
         <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary">
           <HeaderLayout />
           <main>{children}</main>
-          <footer className="py-36">
+          <footer className="py-36 bottom-0">
             <KandAFooter />
             <SpeedInsights />
           </footer>
@@ -49,7 +49,7 @@ const NavBarLayout = () => {
       <Link href="/registry" className="hidden">
         Registry
       </Link>
-      <Link href="/rsvp" className="hidden">
+      <Link href="/rsvp" className="">
         RSVP
       </Link>
     </nav>

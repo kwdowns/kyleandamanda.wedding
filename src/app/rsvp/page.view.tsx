@@ -1,7 +1,7 @@
-"use client"
-import { EventAttributes, createEvent } from "ics";
-import { AttendingStatus, SubmitRsvpRequestBody, UpdateRsvpRequestBody } from "../../client/rsvp";
-import { useState } from "react";
+"use client";
+import { AttendingStatus, RsvpInviteModel, SubmitRsvpRequestBody, UpdateRsvpRequestBody } from "../../client/rsvp";
+import { useRef, useState, useTransition } from "react";
+import { WeddingInfo } from "@/components/WeddingInfo";
 
 
 export interface RsvpFormProps {
@@ -86,35 +86,45 @@ function RsvpForm(props: RsvpFormProps) {
     }
   }
 
+  const inputClassName = "m-2 p-1";
+
+
   return (
     <>
-    <h1> RSVP </h1>
-    {rsvpCode && attendingStatus === "AwaitingResponse" && <p>rsvp not yet submitted</p>}
-    {rsvpCode && attendingStatus !== "AwaitingResponse" && <p>rsvp previously submitted, editing</p>}
-    {!rsvpCode && <p>new rsvp</p>}
-    <div>
-      <label>Name:</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+    {/* {rsvpCode && attendingStatus === "AwaitingResponse" && <p>rsvp not yet submitted</p>}
+    {rsvpCode && attendingStatus !== "AwaitingResponse" && <p>rsvp previously submitted, editing</p>} */}
+    
+    <div className={"mx-auto mt-8 p-2 bg-accent rounded-xl text-center"}>
+      <div className={inputClassName}>
+        <label>Name:</label>
+        <input
+          type="text"
+          className="rounded-md"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-      <label>Attending:</label>
-      <input
-        type="checkbox"
-        checked={attendingStatus == "Attending"}
-        onChange={(e) => setAttendingStatus(e.target.checked ? "Attending" : "Declined")}
-      />
+      <div className={inputClassName}>
+        <label>Attending:</label>
+        <input
+          type="checkbox"
+          checked={attendingStatus == "Attending"}
+          onChange={(e) => setAttendingStatus(e.target.checked ? "Attending" : "Declined")}
+        />
+      </div>
 
-      <label>Food Preference:</label>
-      <input
-        type="text"
-        value={foodPreference ?? ""}
-        onChange={(e) => setFoodPreference(e.target.value)}
-      ></input>
+      <div className={inputClassName}>
+        <label>Dietary restrictions:</label>
+        <input
+          type="text"
+          value={foodPreference ?? ""}
+          onChange={(e) => setFoodPreference(e.target.value)}
+        />
+      </div>
 
-      <div>
+      {guestCount > 0 && (
+      <div className={inputClassName}>
         <p>Additional Guests</p>
         {Array.from({ length: guestCount }).map((_, i) => (
           (<input
@@ -129,11 +139,16 @@ function RsvpForm(props: RsvpFormProps) {
           />)
         ))}
       </div>
-      <input
-        type="text"
-        value={comments ?? ""}
-        onChange={(e) => setComments(e.target.value)}
-      />
+      )}
+
+      <div className={inputClassName}>
+        <label>Comments</label>
+        <input
+          type="text"
+          value={comments ?? ""}
+          onChange={(e) => setComments(e.target.value)}
+        />
+      </div>
 
       {rsvpCode && <input type="hidden" value={rsvpCode} />}
 
@@ -147,54 +162,213 @@ function RsvpForm(props: RsvpFormProps) {
   );
 }
 
-async function createCalendarEvent() {
-  const event: EventAttributes = {
-    start: [2025, 6, 14, 17, 0],
-    duration: { hours: 5, minutes: 0 },
-    title: "Kyle and Amanda's Wedding",
-    description: "Kyle and Amanda are getting married!",
-    categories: ["Wedding"],
-    location: "410 Admiral Boulevard, Kansas City, MO, 64106",
-    url: "https://kyleandamanda.wedding",
-    geo: { lat: 39.10559152902085, lon: -94.57822280235453 },
-    status: "CONFIRMED",
-    busyStatus: "BUSY",
-    organizer: {
-      name: "Kyle and Amanda",
-      email: "kyleandamdandawedding@gmail.com",
-    },
-  };
 
-  const icsFile: File | null = await new Promise((resolve, reject) => {
-    createEvent(event, (error, value) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(
-        new File([value], "KyleAndAmandaWedding.ics", {
-          type: "text/calendar",
-        }),
-      );
-    });
-  });
 
-  if (icsFile) {
-    const url = URL.createObjectURL(icsFile);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "KyleAndAmandaWedding.ics";
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    URL.revokeObjectURL(url);
-  }
-}
+type RsvpSteps = "IsGuestAttending" | "GuestAdditionalGuests" | "GuestFoodPreference" | "GuestComments" | "Declined" | "Submitted";
 
 export default function RsvpView(rsvp : RsvpFormProps){
+
+  const [isPending, startTransition] = useTransition();
+  const [invite, setInvite] = useState<RsvpInviteModel>({id: rsvp.inviteId ?? "", attendingStatus: rsvp.attendingStatus, inviteCount: rsvp.inviteCount, additionalGuestNames: rsvp.guests ?? [], guestName: rsvp.name, foodPreference: rsvp.foodPreference ?? "", comments: rsvp.comments ?? ""});
+  const [step, setStep] = useState<RsvpSteps>("IsGuestAttending");
+
   return (
     <>
-      <RsvpForm {...rsvp} />
+      <h1 className="text-center mt-8 text-4xl">RSVP</h1>
+      <div>
+        {step === "IsGuestAttending" && (
+          <IsGuestAttendingStep
+          invite={invite}
+          onSubmit={(status: AttendingStatus) => {
+            console.log("accepting invite", invite);
+            setInvite({...invite, attendingStatus: status});
+            if(status === "Declined"){
+              startTransition(() => setStep("Declined"));
+            }
+            else if(status === "Attending"){
+              startTransition(() => setStep("GuestAdditionalGuests"));
+            }
+          }}
+        />
+      )}
+      {step === "GuestAdditionalGuests" && (
+        <GuestAdditionalGuestsStep
+          invite={invite}
+          onSubmit={(guests: string[]) => {
+            console.log("submitting additional guests", invite);
+            setInvite({...invite, additionalGuestNames: guests});
+            startTransition(() => setStep("GuestFoodPreference"));
+          }}
+        />
+      )}
+      {step === "GuestFoodPreference" && (
+        <GuestFoodPreferenceStep
+          invite={invite}
+          onSubmit={(foodPreference: string) => {
+            console.log("submitting food preference", invite);
+            setInvite({...invite, foodPreference: foodPreference});
+            startTransition(() => setStep("GuestComments"));
+          }}
+        />
+      )}
+      {step === "GuestComments" && (
+        <GuestCommentsStep
+          invite={invite}
+          onSubmit={(comments: string) => {
+            console.log("submitting comments", invite);
+            setInvite({...invite, comments: comments});
+            startTransition(() => setStep("Submitted"));
+          }}
+        />
+      )}
+      {step === "Declined" && (
+        <div>
+          <p>Thank you for letting us know you won't be able to make it.</p>
+          <p>We hope to see you at the next event!</p>
+        </div>
+      )}
+      {step === "Submitted" && (<div>
+        <p>Thank you for your RSVP!</p>
+      </div>)}
+      </div>
+      {/* <div className="w-11/12 lg:w-3/4 mx-auto">
+        <RsvpForm {...rsvp} />
+      </div>       */}
     </>
   )
+}
+
+interface IsGuestAttendingStepProps {
+  invite: RsvpInviteModel;
+  onSubmit: (status: AttendingStatus) => void;
+}
+
+function IsGuestAttendingStep({ invite, onSubmit }: IsGuestAttendingStepProps) {
+  const [attending, setAttending] = useState(invite.attendingStatus);
+  return (
+    <>
+      <p>Will you be attending?</p>
+      <div>
+        <input
+          type="radio"
+          radioGroup="attending"
+          value="Attending"
+          checked={attending === "Attending"}
+          onChange={() => setAttending("Attending")}
+        />
+          Joyfully Accepts
+        <input
+          type="radio"
+          radioGroup="attending"
+          value="Declined"
+          checked={attending === "Declined"}
+          onChange={() => setAttending("Declined")}
+        />
+          Regretfully Declines
+        
+        <button
+          disabled={attending === "AwaitingResponse"}
+          onClick={() => {
+            if(attending !== "AwaitingResponse"){
+              onSubmit(attending);
+            }
+          }}
+        >
+          {attending === "Attending" ? "Next" : "Submit"}
+        </button>
+      </div>
+    </>
+  );
+}
+
+interface IGuestAdditionalGuestsStepProps {
+  invite: RsvpInviteModel;
+  onSubmit: (additionalGuestNames: string[]) => void;
+}
+
+function GuestAdditionalGuestsStep(
+  { invite, onSubmit }: IGuestAdditionalGuestsStepProps
+) {
+  const guestCount = Math.max(invite.inviteCount, invite.additionalGuestNames.filter(g => (g ?? "").trim() !== "").length);
+
+  const [guests, setGuests] = useState<string[]>(Array
+    .from({ length: guestCount })
+    .map((_, i) => (invite.additionalGuestNames ? [i] ?? "" : "").toString())
+  );
+
+  return (
+    <>
+      <p>Additional Guests</p>
+      {Array.from({ length: guestCount }).map((_, i) => (
+        (<input
+          key={i}
+          type="text"
+          value={guests[i] ?? ""}
+          onChange={(e) => {
+            const newGuests = guests ? [...guests] : [];
+            newGuests[i] = e.target.value;
+            setGuests(newGuests);
+          } } />)
+      ))}
+      <button
+        onClick={() => {
+          onSubmit(guests.filter(g => (g ?? "").trim() !== "").map(g => g.trim()));
+        }}
+      >
+        Submit
+      </button>
+    </>
+  );
+}
+
+interface IGuestFoodPreferenceStepProps {
+  invite: RsvpInviteModel;
+  onSubmit: (foodPrefrence: string) => void;
+}
+
+function GuestFoodPreferenceStep({ invite, onSubmit }: IGuestFoodPreferenceStepProps) {
+  const [foodPreference, setFoodPreference] = useState(invite.foodPreference);
+  return (
+    <>
+      <p>Do you have any dietary restrictions?</p>
+      <input
+        type="text"
+        value={foodPreference}
+        onChange={(e) => setFoodPreference(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          onSubmit(foodPreference);
+        }}
+      >
+        Submit
+      </button>
+    </>
+  );
+}
+
+interface IGuestCommentsStepProps {
+  invite: RsvpInviteModel;
+  onSubmit: (comments: string) => void;
+}
+
+function GuestCommentsStep({ invite, onSubmit }: IGuestCommentsStepProps) {
+  const [comments, setComments] = useState(invite.comments);
+  return (
+    <>
+      <p>Do you have any comments?</p>
+      <input
+        type="text"
+        value={comments}
+        onChange={(e) => setComments(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          onSubmit(comments);
+        }}
+      >
+        Submit
+      </button>
+    </>
+  );
 }
