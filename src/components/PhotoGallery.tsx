@@ -13,17 +13,25 @@ import {
 interface PhotoGalleryProps {
   photos: StaticImageData[];
   useLightbox: boolean;
+  title?: string;
 }
 
 export default function PhotoGallery({
   photos,
   useLightbox,
+  title
 }: PhotoGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   return (
-    <>
+    <div className="mt-8">
+      { title && (
+        <div className="text-center">
+          <h2>{title}</h2>
+        </div>
+      )}
+      
       <PhotoAlbum
         photos={photos}
         renderPhoto={(props) =>
@@ -74,7 +82,7 @@ export default function PhotoGallery({
           }}
         />
       )}
-    </>
+    </div>
   );
 }
 

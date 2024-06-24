@@ -22,10 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className={`${ebGaramond.className}`}>
-        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary min-h-svh">
+        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary min-h-svh relative pb-80">
           <HeaderLayout />
           <main>{children}</main>
-          <footer className="py-36 bottom-0">
+          <footer className="pb-36 mx-auto w-full absolute bottom-0 inset-x-0">
             <KandAFooter />
             <SpeedInsights />
           </footer>
@@ -37,7 +37,7 @@ export default function RootLayout({
 
 const NavBarLayout = () => {
   return (
-    <nav className={`flex justify-around ${inter.className}`}>
+    <nav className={`flex justify-around ${inter.className} text-black`}>
       <Link href="/" className="">
         Home
       </Link>

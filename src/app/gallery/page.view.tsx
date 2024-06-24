@@ -9,11 +9,13 @@ export function GalleryView() {
       <PhotoGallery
         photos={proposal}
         useLightbox={true}
+        title="Proposal"
       />
 
       <PhotoGallery
         photos={engagement}
         useLightbox={true}
+        title="Engagement"
       />
     </>
   );
