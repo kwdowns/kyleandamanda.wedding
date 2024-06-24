@@ -21,10 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head></head>
-      <body className={`${ebGaramond.className} `}>
-        {" "}
-        {/*bg-gradient-to-b from-secondary from-0% to-transparent to-20%*/}
-        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary">
+      <body className={`${ebGaramond.className}`}>
+        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary min-h-svh">
           <HeaderLayout />
           <main>{children}</main>
           <footer className="py-36 bottom-0">

@@ -26,7 +26,7 @@ const config: Config = {
       //bold: "#C4C5BF",
       bold: "#4B735B",
       white: "#FFFFFF",
-      black: "#000000"
+      black: "#000000",
     },
   },
   plugins: [],
