@@ -13,20 +13,33 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-    },
-    colors: {
-      //primary: "#4A6A82",
-      primary: "#45666A",
-      //secondary: "#5E8276",
-      secondary: "#577D98",
-      //tertiary: "#81819C",
-      tertiary: "#45617C",
-      //accent: "#0B536C",
-      accent: "#879A96",
-      //bold: "#C4C5BF",
-      bold: "#4B735B",
-      white: "#FFFFFF",
-      black: "#000000",
+      colors: {
+        primary: {
+          light: "#598388",
+          DEFAULT:"#45666A",
+          dark: "#385356"
+        },
+        secondary: {
+          light: "#7194AD",
+          DEFAULT: "#577D98",
+          dark: "#4A6B82"
+        },
+        tertiary: {
+          light: "#587C9D",
+          DEFAULT: "#45617C",
+          dark: "#3B5268"
+        },
+        accent: {
+          light: "#A6B5B2",
+          DEFAULT: "#879A96",
+          dark: "#7A908B"
+        },
+        compliment: {
+          light: "#619475",
+          DEFAULT: "#4B735B",
+          dark: "#40634E"
+        }
+      },
     },
   },
   plugins: [],

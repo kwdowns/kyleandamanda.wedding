@@ -1,18 +1,4 @@
 import * as rsvpApi from "../../../../client/rsvp";
-export const dynamic = "force-dynamic"; // so that this response isn't cached
-export async function GET(
-  request: Request,
-  { params }: { params: { rsvpCode: string } },
-) {
-  const rsvpResponse = await rsvpApi.getRsvpInvite(params.rsvpCode);
-  if (rsvpResponse) {
-    console.log("rsvp found for code:", params.rsvpCode);
-    return Response.json(rsvpResponse, { status: 200 });
-  }
-  console.log("no rsvp found for code:", params.rsvpCode);
-  return Response.json(null, { status: 204 });
-}
-
 export async function PUT(
   request: Request,
   { params }: { params: { rsvpCode: string } },

@@ -1,12 +1,12 @@
 "use client";
+import AddToCalendar from "@/components/AddToCalendar";
 import {
   AttendingStatus,
   RsvpInviteModel,
-  SubmitRsvpRequestBody,
-  UpdateRsvpRequestBody,
 } from "../../client/rsvp";
-import { useRef, useState, useTransition } from "react";
-import { WeddingInfo } from "@/components/WeddingInfo";
+import { useId, useState, useTransition } from "react";
+import Link from "next/link";
+import * as rsvpApi from "../../client/rsvp";
 
 export interface RsvpFormProps {
   name: string;
@@ -18,160 +18,8 @@ export interface RsvpFormProps {
   inviteCount: number;
 }
 
-function RsvpForm(props: RsvpFormProps) {
-  const [name, setName] = useState(props.name);
-  const [attendingStatus, setAttendingStatus] = useState(props.attendingStatus);
-  const [foodPreference, setFoodPreference] = useState(props.foodPreference);
-  const [guests, setGuests] = useState(props.guests);
-  const [comments, setComments] = useState(props.comments);
-  const [rsvpCode, setRsvpCode] = useState(props.inviteId);
-
-  const guestCount = Math.max(guests?.length ?? 0, props.inviteCount);
-
-  async function submitRsvpInvite(
-    request: SubmitRsvpRequestBody,
-  ): Promise<string> {
-    const response = await fetch(`/api/rsvp`, {
-      body: JSON.stringify(request),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.status != 200) {
-      throw new Error(`Failed to submit RSVP: ${response.statusText}`);
-    }
-
-    const responseBody = await response.json();
-
-    return responseBody.rsvpCode;
-  }
-
-  async function updateRsvpInvite(request: {
-    rsvpCode: string;
-    body: UpdateRsvpRequestBody;
-  }) {
-    const response = await fetch(`/api/rsvp/${request.rsvpCode}`, {
-      body: JSON.stringify(request.body),
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.status != 200) {
-      throw new Error(`Failed to update RSVP: ${response.statusText}`);
-    }
-  }
-
-  async function submitRsvp() {
-    if (rsvpCode) {
-      console.log("updating rsvp");
-      await updateRsvpInvite({
-        rsvpCode: rsvpCode,
-        body: {
-          guestName: name,
-          attending: attendingStatus === "Attending",
-          inviteCount: guestCount,
-          additionalGuestNames: guests ?? [],
-          foodPreference: foodPreference ?? "",
-          comments: comments ?? "",
-        },
-      });
-    } else {
-      console.log("updating rsvp");
-      const newRsvpCode = await submitRsvpInvite({
-        guestName: name,
-        attending: attendingStatus === "Attending",
-        inviteCount: guestCount,
-        additionalGuestNames: guests ?? [],
-        foodPreference: foodPreference ?? "",
-        comments: comments ?? "",
-      });
-      setRsvpCode(newRsvpCode);
-    }
-  }
-
-  const inputClassName = "m-2 p-1";
-
-  return (
-    <>
-      {/* {rsvpCode && attendingStatus === "AwaitingResponse" && <p>rsvp not yet submitted</p>}
-    {rsvpCode && attendingStatus !== "AwaitingResponse" && <p>rsvp previously submitted, editing</p>} */}
-
-      <div className={"mx-auto mt-8 p-2 bg-accent rounded-xl text-center"}>
-        <div className={inputClassName}>
-          <label>Name:</label>
-          <input
-            type="text"
-            className="rounded-md"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-
-        <div className={inputClassName}>
-          <label>Attending:</label>
-          <input
-            type="checkbox"
-            checked={attendingStatus == "Attending"}
-            onChange={(e) =>
-              setAttendingStatus(e.target.checked ? "Attending" : "Declined")
-            }
-          />
-        </div>
-
-        <div className={inputClassName}>
-          <label>Dietary restrictions:</label>
-          <input
-            type="text"
-            value={foodPreference ?? ""}
-            onChange={(e) => setFoodPreference(e.target.value)}
-          />
-        </div>
-
-        {guestCount > 0 && (
-          <div className={inputClassName}>
-            <p>Additional Guests</p>
-            {Array.from({ length: guestCount }).map((_, i) => (
-              <input
-                key={i}
-                type="text"
-                value={guests?.[i] ?? ""}
-                onChange={(e) => {
-                  const newGuests = guests ? [...guests] : [];
-                  newGuests[i] = e.target.value;
-                  setGuests(newGuests);
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        <div className={inputClassName}>
-          <label>Comments</label>
-          <input
-            type="text"
-            value={comments ?? ""}
-            onChange={(e) => setComments(e.target.value)}
-          />
-        </div>
-
-        {rsvpCode && <input type="hidden" value={rsvpCode} />}
-
-        <div
-          className={"bg-tertiary text-white p-2 rounded w-fit"}
-          onClick={submitRsvp}
-        >
-          Submit
-        </div>
-      </div>
-    </>
-  );
-}
-
 type RsvpSteps =
+  | "ScanQR"
   | "IsGuestAttending"
   | "GuestAdditionalGuests"
   | "GuestFoodPreference"
@@ -179,33 +27,86 @@ type RsvpSteps =
   | "Declined"
   | "Submitted";
 
-export default function RsvpView(rsvp: RsvpFormProps) {
+export default function RsvpView(rsvp: RsvpFormProps | null) {
   const [isPending, startTransition] = useTransition();
   const [invite, setInvite] = useState<RsvpInviteModel>({
-    id: rsvp.inviteId ?? "",
-    attendingStatus: rsvp.attendingStatus,
-    inviteCount: rsvp.inviteCount,
-    additionalGuestNames: rsvp.guests ?? [],
-    guestName: rsvp.name,
-    foodPreference: rsvp.foodPreference ?? "",
-    comments: rsvp.comments ?? "",
+    id: rsvp?.inviteId ?? "",
+    attendingStatus: rsvp?.attendingStatus ?? "AwaitingResponse",
+    inviteCount: rsvp?.inviteCount ?? 0,
+    additionalGuestNames: rsvp?.guests ?? [],
+    guestName: rsvp?.name ?? "",
+    foodPreference: rsvp?.foodPreference ?? "",
+    comments: rsvp?.comments ?? "",
   });
-  const [step, setStep] = useState<RsvpSteps>("IsGuestAttending");
+  const [step, setStep] = useState<RsvpSteps>(rsvp && rsvp.inviteId ? "IsGuestAttending" : "ScanQR");
+
+  async function submitResponse(inviteModel: RsvpInviteModel): Promise<string | null>{
+    if(inviteModel.id){
+      await rsvpApi.updateRsvpInvite({
+        rsvpCode: inviteModel.id,        
+        body: {
+          attending: inviteModel.attendingStatus === "Attending",
+          additionalGuestNames: inviteModel.additionalGuestNames,
+          comments: inviteModel.comments,
+          foodPreference: inviteModel.foodPreference,
+          guestName: inviteModel.guestName,
+          inviteCount: inviteModel.inviteCount
+        }
+      });
+    }
+    else{
+      let rsvpCode = await rsvpApi.submitRsvpInvite({
+        body: {
+          attending: inviteModel.attendingStatus === "Attending",
+          additionalGuestNames: inviteModel.additionalGuestNames,
+          comments: inviteModel.comments,
+          foodPreference: inviteModel.foodPreference,
+          guestName: inviteModel.guestName,
+          inviteCount: inviteModel.inviteCount
+        }
+      });
+      return rsvpCode;
+    }
+    return null;
+  }
 
   return (
     <>
-      <h1 className="text-center mt-8 text-4xl">RSVP</h1>
-      <div>
+      <h1 className="text-center mt-8 text-4xl mb-12">RSVP</h1>
+      <div className="w-4/5 md:w-3/4 xl:w-1/2 2xl:w-1/3 mx-auto">
+        {step === "ScanQR" && (
+          <div className="text-center">
+            <p>
+              Please scan the QR code on your invitation to RSVP
+            </p>
+            <p className="mt-4">
+              If you are having trouble, please contact us directly at <a href="mailto:rsvp@kyleandamanda.wedding">rsvp@kyleandamanda.wedding</a>
+            </p>
+          </div>
+        )}
         {step === "IsGuestAttending" && (
           <IsGuestAttendingStep
             invite={invite}
             onSubmit={(status: AttendingStatus) => {
               console.log("accepting invite", invite);
-              setInvite({ ...invite, attendingStatus: status });
               if (status === "Declined") {
-                startTransition(() => setStep("Declined"));
+                startTransition(async () =>{
+                  setInvite({ ...invite, attendingStatus: status });
+                  let resp = submitResponse({ ...invite, attendingStatus: status });
+                  setStep("Declined");
+                  await resp;
+                });
               } else if (status === "Attending") {
-                startTransition(() => setStep("GuestAdditionalGuests"));
+                startTransition(() => {
+                  setInvite({ ...invite, attendingStatus: status });
+                  let hasAdditionalGuests = Math.max(invite.additionalGuestNames.length, invite.inviteCount);
+                  if(hasAdditionalGuests > 0){
+                    setStep("GuestAdditionalGuests");
+                  }
+                  else{
+                    setStep("GuestFoodPreference");
+                  }
+                });
               }
             }}
           />
@@ -215,8 +116,10 @@ export default function RsvpView(rsvp: RsvpFormProps) {
             invite={invite}
             onSubmit={(guests: string[]) => {
               console.log("submitting additional guests", invite);
-              setInvite({ ...invite, additionalGuestNames: guests });
-              startTransition(() => setStep("GuestFoodPreference"));
+              startTransition(() => {
+                setInvite({ ...invite, additionalGuestNames: guests });
+                setStep("GuestFoodPreference");
+              });
             }}
           />
         )}
@@ -225,8 +128,11 @@ export default function RsvpView(rsvp: RsvpFormProps) {
             invite={invite}
             onSubmit={(foodPreference: string) => {
               console.log("submitting food preference", invite);
-              setInvite({ ...invite, foodPreference: foodPreference });
-              startTransition(() => setStep("GuestComments"));
+              startTransition(() => {
+                setInvite({ ...invite, foodPreference: foodPreference });
+                setStep("GuestComments");
+              });
+              
             }}
           />
         )}
@@ -234,9 +140,12 @@ export default function RsvpView(rsvp: RsvpFormProps) {
           <GuestCommentsStep
             invite={invite}
             onSubmit={(comments: string) => {
-              console.log("submitting comments", invite);
-              setInvite({ ...invite, comments: comments });
-              startTransition(() => setStep("Submitted"));
+              console.log("submitting comments", invite);    
+              startTransition(async () =>{
+                let resp = await submitResponse({ ...invite, comments: comments });
+                setInvite({ ...invite, comments: comments, id: resp ?? invite.id });
+                setStep("Submitted");
+              });
             }}
           />
         )}
@@ -246,17 +155,22 @@ export default function RsvpView(rsvp: RsvpFormProps) {
               Thank you for letting us know you won&apos;t be able to make it.
             </p>
             <p>We hope to see you at the next event!</p>
+            <p>If you change your mind use this link <Link href={`/rsvp/${invite.id}`}/> to update your RSVP or contact us directly before :TODO:rsvp-due-date:.</p>
+
+            <Link href="/">Return to the homepage</Link>
           </div>
         )}
         {step === "Submitted" && (
           <div>
             <p>Thank you for your RSVP!</p>
+            <p>We can&apos;t wait to see you at the wedding!</p>
+            <p>Add a reminder to your calendar:</p>
+            <AddToCalendar />
+            <p>If need to make any changes use this link <Link href={`/rsvp/${invite.id}`}>this link</Link> to update your RSVP details or contact us directly before :TODO:rsvp-due-date:.</p>
+            <Link href="/">Return to the homepage</Link>
           </div>
         )}
       </div>
-      {/* <div className="w-11/12 lg:w-3/4 mx-auto">
-        <RsvpForm {...rsvp} />
-      </div>       */}
     </>
   );
 }
@@ -270,34 +184,24 @@ function IsGuestAttendingStep({ invite, onSubmit }: IsGuestAttendingStepProps) {
   const [attending, setAttending] = useState(invite.attendingStatus);
   return (
     <>
-      <p>Will you be attending?</p>
-      <div>
-        <input
-          type="radio"
-          radioGroup="attending"
-          value="Attending"
-          checked={attending === "Attending"}
-          onChange={() => setAttending("Attending")}
+      <div className="flex flex-col">
+        <RadioGroup
+          label="Will you be attending?"
+          value={attending}
+          onChange={(e) => setAttending(e.target.value as AttendingStatus)}
+          options={[
+            { value: "Attending", label: "Joyfully Accepts" },
+            { value: "Declined", label: "Regretfully Declines" },
+          ]}
         />
-        Joyfully Accepts
-        <input
-          type="radio"
-          radioGroup="attending"
-          value="Declined"
-          checked={attending === "Declined"}
-          onChange={() => setAttending("Declined")}
-        />
-        Regretfully Declines
-        <button
-          disabled={attending === "AwaitingResponse"}
+        <SubmitButton
           onClick={() => {
             if (attending !== "AwaitingResponse") {
               onSubmit(attending);
             }
           }}
-        >
-          {attending === "Attending" ? "Next" : "Submit"}
-        </button>
+          disabled={attending !== "Attending" && attending !== "Declined"}
+        />
       </div>
     </>
   );
@@ -319,26 +223,28 @@ function GuestAdditionalGuestsStep({
 
   const [guests, setGuests] = useState<string[]>(
     Array.from({ length: guestCount }).map((_, i) =>
-      (invite.additionalGuestNames ? [i] ?? "" : "").toString(),
+      (invite.additionalGuestNames ? invite.additionalGuestNames[i] ?? "" : "").toString(),
     ),
   );
-
+console.log(guests);
   return (
-    <>
-      <p>Additional Guests</p>
+    <div className="flex flex-col">
+      <p className="text-xl">Please enter the name(s) of any additional guests</p>
+      <div className="grid gap-6 md:grid-cols-2">
       {Array.from({ length: guestCount }).map((_, i) => (
-        <input
-          key={i}
-          type="text"
-          value={guests[i] ?? ""}
+        <TextBox
+          label={`Guest ${i + 1}`}
+          value={guests ? guests[i] ?? "" : ""}
           onChange={(e) => {
             const newGuests = guests ? [...guests] : [];
             newGuests[i] = e.target.value;
             setGuests(newGuests);
           }}
-        />
+        />        
       ))}
+      </div>
       <button
+        className="mt-4 bg-secondary text-white px-4 py-2 rounded-md"
         onClick={() => {
           onSubmit(
             guests.filter((g) => (g ?? "").trim() !== "").map((g) => g.trim()),
@@ -347,7 +253,7 @@ function GuestAdditionalGuestsStep({
       >
         Submit
       </button>
-    </>
+    </div>
   );
 }
 
@@ -362,21 +268,19 @@ function GuestFoodPreferenceStep({
 }: IGuestFoodPreferenceStepProps) {
   const [foodPreference, setFoodPreference] = useState(invite.foodPreference);
   return (
-    <>
-      <p>Do you have any dietary restrictions?</p>
-      <input
-        type="text"
+    <div className="flex flex-col">
+      <TextArea
+        label={"Do you have any dietary restrictions or food preferences?"}
         value={foodPreference}
         onChange={(e) => setFoodPreference(e.target.value)}
       />
-      <button
+      <SubmitButton
         onClick={() => {
           onSubmit(foodPreference);
         }}
-      >
-        Submit
-      </button>
-    </>
+        disabled={false}
+      />
+    </div>
   );
 }
 
@@ -388,20 +292,101 @@ interface IGuestCommentsStepProps {
 function GuestCommentsStep({ invite, onSubmit }: IGuestCommentsStepProps) {
   const [comments, setComments] = useState(invite.comments);
   return (
-    <>
-      <p>Do you have any comments?</p>
-      <input
-        type="text"
+    <div className="flex flex-col">
+      <TextArea
+        label="Do you have a message for the bride and groom?"
         value={comments}
         onChange={(e) => setComments(e.target.value)}
       />
-      <button
+      <SubmitButton
         onClick={() => {
           onSubmit(comments);
         }}
-      >
-        Submit
-      </button>
+        disabled={false}
+      />
+    </div>
+  );
+}
+
+function TextBox({ label, value, placeholder, onChange }: { label: string; value: string; placeholder?: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; }) {
+  const [currentValue, setCurrentValue] = useState(value);
+  return (
+    <label>
+      {label}
+      <input
+        type="text"
+        value={currentValue}
+        placeholder={placeholder}
+        onChange={(e) => {
+          setCurrentValue(e.target.value);
+          onChange(e);
+        }}
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    </label>
+  );
+}
+
+const SubmitButton = ({ onClick, disabled, text } : { onClick: () => void, disabled: boolean, text?: string }) => (
+  <button
+    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md disabled:bg-blue-900 disabled:cursor-not-allowed disabled:text-gray-500"
+    disabled={disabled}
+    onClick={onClick}
+  >
+    {text ?? "Submit"}
+  </button>
+);
+
+function TextArea({ label, value, onChange }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; }) {
+  const [currentValue, setCurrentValue] = useState(value);
+  return (
+    <label>
+      {label}
+      <textarea
+        value={currentValue}
+        onChange={(e) => {
+          setCurrentValue(e.target.value);
+          onChange(e);
+        }}
+        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
+    </label>
+  );
+}
+
+function RadioGroup({ label, value, onChange, options }: { label: string; value: string | null; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; options: { value: string; label: string; }[]; }) {
+  
+  const [selected, setSelected] = useState(value);
+  return (
+    <>
+      <p className="text-2xl mb-8 text-center">{label}</p>
+      <ul className="grid w-full gap-6 md:grid-cols-2">
+        {options.map((option) => {
+          const inputId = useId();
+          return (
+            <li key={option.label}>
+              <input
+                id={inputId}
+                type="radio"
+                radioGroup=""
+                value={option.value}
+                checked={option.value === selected}
+                onChange={(e) => {
+                  setSelected(e.target.value);
+                  onChange(e);
+                }}
+                className="peer hidden" 
+              />
+              <label
+                key={option.value}
+                htmlFor={inputId}
+                className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light hover:peer-checked:bg-tertiary-light"
+              >
+                <div className="block w-full text-lg font-semibold">
+                  {option.label}
+                </div>
+              </label>
+              
+            </li>)})}
+      </ul>
     </>
   );
 }

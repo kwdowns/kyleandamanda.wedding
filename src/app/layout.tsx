@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className={`${ebGaramond.className}`}>
-        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-15% vh-max bg-primary min-h-svh relative pb-80">
+        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-20% vh-max bg-primary min-h-svh relative pb-80">
           <HeaderLayout />
           <main>{children}</main>
           <footer className="pb-36 mx-auto w-full absolute bottom-0 inset-x-0">
@@ -56,7 +56,7 @@ const NavBarLayout = () => {
 
 const HeaderLayout = () => {
   return (
-    <header className="bg-accent text-white px-7 py-6">
+    <header className="bg-accent px-auto py-5">
       <NavBarLayout />
     </header>
   );

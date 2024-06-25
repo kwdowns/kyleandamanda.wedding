@@ -30,6 +30,11 @@ import img_gallery_f97563e33ec04c3186f55a113a5f0034 from '../../public/gallery/p
 import img_gallery_f9b9a2cb405f4c8998f0e43d081b17f8 from '../../public/gallery/proposal/img_gallery_f9b9a2cb405f4c8998f0e43d081b17f8.jpg';
 import img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a from '../../public/gallery/proposal/img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a.jpg';
 
+
+
+export const images = 
+];
+
 export const engagement = [
  EB9A4386,
  EB9A4386_2,
