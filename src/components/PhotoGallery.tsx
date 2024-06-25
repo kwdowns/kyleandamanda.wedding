@@ -19,19 +19,19 @@ interface PhotoGalleryProps {
 export default function PhotoGallery({
   photos,
   useLightbox,
-  title
+  title,
 }: PhotoGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   return (
     <div className="mt-8">
-      { title && (
+      {title && (
         <div className="text-center">
           <h2>{title}</h2>
         </div>
       )}
-      
+
       <PhotoAlbum
         photos={photos}
         renderPhoto={(props) =>

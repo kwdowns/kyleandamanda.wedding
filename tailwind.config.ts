@@ -16,29 +16,29 @@ const config: Config = {
       colors: {
         primary: {
           light: "#598388",
-          DEFAULT:"#45666A",
-          dark: "#385356"
+          DEFAULT: "#45666A",
+          dark: "#385356",
         },
         secondary: {
           light: "#7194AD",
           DEFAULT: "#577D98",
-          dark: "#4A6B82"
+          dark: "#4A6B82",
         },
         tertiary: {
           light: "#587C9D",
           DEFAULT: "#45617C",
-          dark: "#3B5268"
+          dark: "#3B5268",
         },
         accent: {
           light: "#A6B5B2",
           DEFAULT: "#879A96",
-          dark: "#7A908B"
+          dark: "#7A908B",
         },
         compliment: {
           light: "#619475",
           DEFAULT: "#4B735B",
-          dark: "#40634E"
-        }
+          dark: "#40634E",
+        },
       },
     },
   },

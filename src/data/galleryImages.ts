@@ -32,7 +32,7 @@ import img_gallery_fa7f2771fa12454ba95f143b1dbb9c4a from '../../public/gallery/p
 
 
 
-export const images = 
+export const images = [
 ];
 
 export const engagement = [

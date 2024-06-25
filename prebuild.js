@@ -16,7 +16,7 @@ function generateGalleryImageExports() {
     return [".jpg", ".png", ".jpeg", ".gif"].includes(extension);
   });
 
-  exports["images"] = "export const images = [";
+  exports["images"] = "export const images = [ ";
 
   files.forEach((file) => {
     const importPath = path.relative(

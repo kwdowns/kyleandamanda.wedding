@@ -1,9 +1,6 @@
 "use client";
 import AddToCalendar from "@/components/AddToCalendar";
-import {
-  AttendingStatus,
-  RsvpInviteModel,
-} from "../../client/rsvp";
+import { AttendingStatus, RsvpInviteModel } from "../../client/rsvp";
 import { useId, useState, useTransition } from "react";
 import Link from "next/link";
 import * as rsvpApi from "../../client/rsvp";
@@ -38,23 +35,26 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
     foodPreference: rsvp?.foodPreference ?? "",
     comments: rsvp?.comments ?? "",
   });
-  const [step, setStep] = useState<RsvpSteps>(rsvp && rsvp.inviteId ? "IsGuestAttending" : "ScanQR");
+  const [step, setStep] = useState<RsvpSteps>(
+    rsvp && rsvp.inviteId ? "IsGuestAttending" : "ScanQR",
+  );
 
-  async function submitResponse(inviteModel: RsvpInviteModel): Promise<string | null>{
-    if(inviteModel.id){
+  async function submitResponse(
+    inviteModel: RsvpInviteModel,
+  ): Promise<string | null> {
+    if (inviteModel.id) {
       await rsvpApi.updateRsvpInvite({
-        rsvpCode: inviteModel.id,        
+        rsvpCode: inviteModel.id,
         body: {
           attending: inviteModel.attendingStatus === "Attending",
           additionalGuestNames: inviteModel.additionalGuestNames,
           comments: inviteModel.comments,
           foodPreference: inviteModel.foodPreference,
           guestName: inviteModel.guestName,
-          inviteCount: inviteModel.inviteCount
-        }
+          inviteCount: inviteModel.inviteCount,
+        },
       });
-    }
-    else{
+    } else {
       let rsvpCode = await rsvpApi.submitRsvpInvite({
         body: {
           attending: inviteModel.attendingStatus === "Attending",
@@ -62,8 +62,8 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           comments: inviteModel.comments,
           foodPreference: inviteModel.foodPreference,
           guestName: inviteModel.guestName,
-          inviteCount: inviteModel.inviteCount
-        }
+          inviteCount: inviteModel.inviteCount,
+        },
       });
       return rsvpCode;
     }
@@ -76,11 +76,12 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
       <div className="w-4/5 md:w-3/4 xl:w-1/2 2xl:w-1/3 mx-auto">
         {step === "ScanQR" && (
           <div className="text-center">
-            <p>
-              Please scan the QR code on your invitation to RSVP
-            </p>
+            <p>Please scan the QR code on your invitation to RSVP</p>
             <p className="mt-4">
-              If you are having trouble, please contact us directly at <a href="mailto:rsvp@kyleandamanda.wedding">rsvp@kyleandamanda.wedding</a>
+              If you are having trouble, please contact us directly at{" "}
+              <a href="mailto:rsvp@kyleandamanda.wedding">
+                rsvp@kyleandamanda.wedding
+              </a>
             </p>
           </div>
         )}
@@ -90,20 +91,25 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
             onSubmit={(status: AttendingStatus) => {
               console.log("accepting invite", invite);
               if (status === "Declined") {
-                startTransition(async () =>{
+                startTransition(async () => {
                   setInvite({ ...invite, attendingStatus: status });
-                  let resp = submitResponse({ ...invite, attendingStatus: status });
+                  let resp = submitResponse({
+                    ...invite,
+                    attendingStatus: status,
+                  });
                   setStep("Declined");
                   await resp;
                 });
               } else if (status === "Attending") {
                 startTransition(() => {
                   setInvite({ ...invite, attendingStatus: status });
-                  let hasAdditionalGuests = Math.max(invite.additionalGuestNames.length, invite.inviteCount);
-                  if(hasAdditionalGuests > 0){
+                  let hasAdditionalGuests = Math.max(
+                    invite.additionalGuestNames.length,
+                    invite.inviteCount,
+                  );
+                  if (hasAdditionalGuests > 0) {
                     setStep("GuestAdditionalGuests");
-                  }
-                  else{
+                  } else {
                     setStep("GuestFoodPreference");
                   }
                 });
@@ -132,7 +138,6 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
                 setInvite({ ...invite, foodPreference: foodPreference });
                 setStep("GuestComments");
               });
-              
             }}
           />
         )}
@@ -140,10 +145,17 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           <GuestCommentsStep
             invite={invite}
             onSubmit={(comments: string) => {
-              console.log("submitting comments", invite);    
-              startTransition(async () =>{
-                let resp = await submitResponse({ ...invite, comments: comments });
-                setInvite({ ...invite, comments: comments, id: resp ?? invite.id });
+              console.log("submitting comments", invite);
+              startTransition(async () => {
+                let resp = await submitResponse({
+                  ...invite,
+                  comments: comments,
+                });
+                setInvite({
+                  ...invite,
+                  comments: comments,
+                  id: resp ?? invite.id,
+                });
                 setStep("Submitted");
               });
             }}
@@ -155,7 +167,11 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
               Thank you for letting us know you won&apos;t be able to make it.
             </p>
             <p>We hope to see you at the next event!</p>
-            <p>If you change your mind use this link <Link href={`/rsvp/${invite.id}`}/> to update your RSVP or contact us directly before :TODO:rsvp-due-date:.</p>
+            <p>
+              If you change your mind use this link{" "}
+              <Link href={`/rsvp/${invite.id}`} /> to update your RSVP or
+              contact us directly before :TODO:rsvp-due-date:.
+            </p>
 
             <Link href="/">Return to the homepage</Link>
           </div>
@@ -166,7 +182,11 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
             <p>We can&apos;t wait to see you at the wedding!</p>
             <p>Add a reminder to your calendar:</p>
             <AddToCalendar />
-            <p>If need to make any changes use this link <Link href={`/rsvp/${invite.id}`}>this link</Link> to update your RSVP details or contact us directly before :TODO:rsvp-due-date:.</p>
+            <p>
+              If need to make any changes use this link{" "}
+              <Link href={`/rsvp/${invite.id}`}>this link</Link> to update your
+              RSVP details or contact us directly before :TODO:rsvp-due-date:.
+            </p>
             <Link href="/">Return to the homepage</Link>
           </div>
         )}
@@ -223,25 +243,30 @@ function GuestAdditionalGuestsStep({
 
   const [guests, setGuests] = useState<string[]>(
     Array.from({ length: guestCount }).map((_, i) =>
-      (invite.additionalGuestNames ? invite.additionalGuestNames[i] ?? "" : "").toString(),
+      (invite.additionalGuestNames
+        ? invite.additionalGuestNames[i] ?? ""
+        : ""
+      ).toString(),
     ),
   );
-console.log(guests);
+  console.log(guests);
   return (
     <div className="flex flex-col">
-      <p className="text-xl">Please enter the name(s) of any additional guests</p>
+      <p className="text-xl">
+        Please enter the name(s) of any additional guests
+      </p>
       <div className="grid gap-6 md:grid-cols-2">
-      {Array.from({ length: guestCount }).map((_, i) => (
-        <TextBox
-          label={`Guest ${i + 1}`}
-          value={guests ? guests[i] ?? "" : ""}
-          onChange={(e) => {
-            const newGuests = guests ? [...guests] : [];
-            newGuests[i] = e.target.value;
-            setGuests(newGuests);
-          }}
-        />        
-      ))}
+        {Array.from({ length: guestCount }).map((_, i) => (
+          <TextBox
+            label={`Guest ${i + 1}`}
+            value={guests ? guests[i] ?? "" : ""}
+            onChange={(e) => {
+              const newGuests = guests ? [...guests] : [];
+              newGuests[i] = e.target.value;
+              setGuests(newGuests);
+            }}
+          />
+        ))}
       </div>
       <button
         className="mt-4 bg-secondary text-white px-4 py-2 rounded-md"
@@ -308,7 +333,17 @@ function GuestCommentsStep({ invite, onSubmit }: IGuestCommentsStepProps) {
   );
 }
 
-function TextBox({ label, value, placeholder, onChange }: { label: string; value: string; placeholder?: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; }) {
+function TextBox({
+  label,
+  value,
+  placeholder,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   const [currentValue, setCurrentValue] = useState(value);
   return (
     <label>
@@ -321,12 +356,21 @@ function TextBox({ label, value, placeholder, onChange }: { label: string; value
           setCurrentValue(e.target.value);
           onChange(e);
         }}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      />
     </label>
   );
 }
 
-const SubmitButton = ({ onClick, disabled, text } : { onClick: () => void, disabled: boolean, text?: string }) => (
+const SubmitButton = ({
+  onClick,
+  disabled,
+  text,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  text?: string;
+}) => (
   <button
     className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md disabled:bg-blue-900 disabled:cursor-not-allowed disabled:text-gray-500"
     disabled={disabled}
@@ -336,7 +380,15 @@ const SubmitButton = ({ onClick, disabled, text } : { onClick: () => void, disab
   </button>
 );
 
-function TextArea({ label, value, onChange }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; }) {
+function TextArea({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
   const [currentValue, setCurrentValue] = useState(value);
   return (
     <label>
@@ -347,13 +399,23 @@ function TextArea({ label, value, onChange }: { label: string; value: string; on
           setCurrentValue(e.target.value);
           onChange(e);
         }}
-        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
+        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+      />
     </label>
   );
 }
 
-function RadioGroup({ label, value, onChange, options }: { label: string; value: string | null; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; options: { value: string; label: string; }[]; }) {
-  
+function RadioGroup({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string | null;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  options: { value: string; label: string }[];
+}) {
   const [selected, setSelected] = useState(value);
   return (
     <>
@@ -373,7 +435,7 @@ function RadioGroup({ label, value, onChange, options }: { label: string; value:
                   setSelected(e.target.value);
                   onChange(e);
                 }}
-                className="peer hidden" 
+                className="peer hidden"
               />
               <label
                 key={option.value}
@@ -384,8 +446,9 @@ function RadioGroup({ label, value, onChange, options }: { label: string; value:
                   {option.label}
                 </div>
               </label>
-              
-            </li>)})}
+            </li>
+          );
+        })}
       </ul>
     </>
   );
