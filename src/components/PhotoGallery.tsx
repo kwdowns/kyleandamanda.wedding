@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useMemo, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { PhotoAlbum } from "react-photo-album";
 import Lightbox, { RenderSlideProps, Slide } from "yet-another-react-lightbox";
@@ -11,36 +11,57 @@ import {
 } from "yet-another-react-lightbox";
 
 interface PhotoGalleryProps {
+  title?: string;
   photos: StaticImageData[];
   useLightbox: boolean;
-  title?: string;
+  shufflePhotos?: boolean;
 }
+function shuffle<T>(array: T[]): T[] {
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+  const newArray = array.slice();
 
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    temporaryValue = newArray[currentIndex];
+    newArray[currentIndex] = newArray[randomIndex];
+    newArray[randomIndex] = temporaryValue;
+  }
+
+  return newArray;
+}
 export default function PhotoGallery({
+  title,
   photos,
   useLightbox,
-  title,
 }: PhotoGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const galleryPhotos = useMemo(() => {
+    if (photos.length > 1) {
+      return shuffle(photos);
+    }
+    return photos;
+  }, []);
 
   return (
     <div className="mt-8">
-      {title && (
-        <div className="text-center">
-          <h2>{title}</h2>
-        </div>
-      )}
-
+      {title && (<h2 className="text-center text-2xl ">{title}</h2>)}
+      <button onClick={() => {
+        
+      }}>🔀</button>
       <PhotoAlbum
-        photos={photos}
+        photos={galleryPhotos}
         renderPhoto={(props) =>
           GalleryImage({
             ...props,
             onClick: () => {
               setLightboxOpen(true);
               setLightboxIndex(
-                photos.findIndex((photo) => photo.src === props.photo.src),
+                galleryPhotos.findIndex((photo) => photo.src === props.photo.src),
               );
             },
           })
@@ -58,7 +79,10 @@ export default function PhotoGallery({
           if (containerWidth < 1200) {
             return 3;
           }
-          return 4;
+          if (containerWidth < 1600){
+            return 4;
+          }
+          return 5;
         }}
       />
       {useLightbox && (
@@ -66,13 +90,13 @@ export default function PhotoGallery({
           open={lightboxOpen}
           close={() => setLightboxOpen(false)}
           index={lightboxIndex}
-          slides={photos.map((image) => ({ src: image.src }))}
+          slides={galleryPhotos.map((image) => ({ src: image.src }))}
           render={{
             slide: (props: RenderSlideProps<Slide>) =>
               LightboxImage({
                 ...props,
                 lookupStaticImageData: (src) =>
-                  photos.find((photo) => photo.src === src),
+                  galleryPhotos.find((photo) => photo.src === src),
               }),
           }}
           on={{

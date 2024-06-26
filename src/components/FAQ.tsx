@@ -9,7 +9,7 @@ type Faq = {
 export default function FaqSection() {
   const faqs = faqData.faqs;
   return (
-    <div className="w-4/5 md:w-3/4 lg:1/2 mx-auto">
+    <ul>
       {faqs.map((faq, index) => (
         <FaqItem
           key={`faq_${index}`}
@@ -17,7 +17,7 @@ export default function FaqSection() {
           answer={faq.answer}
         />
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -26,10 +26,12 @@ interface IFaqItemProps extends Faq {}
 function FaqItem({ question, answer }: IFaqItemProps) {
   if (answer) {
     return (
-      <div className="my-4 p-2 border-b text-pretty bg-accent rounded-lg drop-shadow-md">
-        <h4 className="text-xl font-bold text-left">{question}</h4>
-        <p className="text-md text-left pt-4">{answer}</p>
-      </div>
+      <li >
+        <div className="my-4 p-2 border-2 border-tertiary-light text-pretty bg-accent rounded-lg drop-shadow-xl">
+          <h4 className="text-xl font-bold text-left">{question}</h4>
+          <p className="text-md text-left pt-4">{answer}</p>
+        </div>
+      </li>
     );
   }
 }
