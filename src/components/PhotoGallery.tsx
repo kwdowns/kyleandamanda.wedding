@@ -14,25 +14,8 @@ interface PhotoGalleryProps {
   title?: string;
   photos: StaticImageData[];
   useLightbox: boolean;
-  shufflePhotos?: boolean;
 }
-function shuffle<T>(array: T[]): T[] {
-  let currentIndex = array.length;
-  let temporaryValue;
-  let randomIndex;
-  const newArray = array.slice();
 
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    temporaryValue = newArray[currentIndex];
-    newArray[currentIndex] = newArray[randomIndex];
-    newArray[randomIndex] = temporaryValue;
-  }
-
-  return newArray;
-}
 export default function PhotoGallery({
   title,
   photos,
@@ -40,12 +23,6 @@ export default function PhotoGallery({
 }: PhotoGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const galleryPhotos = useMemo(() => {
-    if (photos.length > 1) {
-      return shuffle(photos);
-    }
-    return photos;
-  }, []);
 
   return (
     <div className="mt-8">
@@ -54,14 +31,14 @@ export default function PhotoGallery({
         
       }}>🔀</button>
       <PhotoAlbum
-        photos={galleryPhotos}
+        photos={photos}
         renderPhoto={(props) =>
           GalleryImage({
             ...props,
             onClick: () => {
               setLightboxOpen(true);
               setLightboxIndex(
-                galleryPhotos.findIndex((photo) => photo.src === props.photo.src),
+                photos.findIndex((photo) => photo.src === props.photo.src),
               );
             },
           })
@@ -90,13 +67,13 @@ export default function PhotoGallery({
           open={lightboxOpen}
           close={() => setLightboxOpen(false)}
           index={lightboxIndex}
-          slides={galleryPhotos.map((image) => ({ src: image.src }))}
+          slides={photos.map((image) => ({ src: image.src }))}
           render={{
             slide: (props: RenderSlideProps<Slide>) =>
               LightboxImage({
                 ...props,
                 lookupStaticImageData: (src) =>
-                  galleryPhotos.find((photo) => photo.src === src),
+                  photos.find((photo) => photo.src === src),
               }),
           }}
           on={{
