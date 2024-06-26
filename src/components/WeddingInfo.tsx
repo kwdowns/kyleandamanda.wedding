@@ -8,7 +8,6 @@ export interface WeddingInfoProps {
   state?: string;
   street?: string;
   zip?: string;
-  showMap?: boolean;
 }
 
 export function WeddingInfo({
@@ -17,7 +16,6 @@ export function WeddingInfo({
   state = wedding.state,
   street = wedding.street,
   zip = wedding.zip,
-  showMap = true,
 }: WeddingInfoProps) {
   const daysUntil = useMemo(() => {
     const diffTime = date.getTime() - Date.now();
@@ -28,7 +26,7 @@ export function WeddingInfo({
     <div className="grid grid-rows-1 gap-4 text-xl text-center">
       <div className="flex flex-row items-center justify-evenly">
         <span>{date.toDateString()}</span>
-        <span>{daysUntil} days</span>
+        <span>{daysUntil} days to go!</span>
       </div>
       <div>
         <p>{street}</p>
@@ -36,7 +34,6 @@ export function WeddingInfo({
           {city}, {state} {zip}
         </p>
       </div>
-      {showMap && <MapView />}
     </div>
   );
 }

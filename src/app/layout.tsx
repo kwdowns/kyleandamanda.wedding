@@ -47,7 +47,7 @@ const NavBarLayout = () => {
       <Link href="/registry" className="hidden">
         Registry
       </Link>
-      <Link href="/rsvp" className="">
+      <Link href="/rsvp" className="hidden">
         RSVP
       </Link>
     </nav>

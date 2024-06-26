@@ -5,5 +5,9 @@ export const metadata: Metadata = {
 };
 
 export default function Travel() {
-  return <h1>The wedding of kyle and amanda</h1>;
+  return (
+    <div className="w-full mx-auto lg:w-4/5 xl:w-2/3 2xl:w-1/2">
+      <h1 className="text-center text-4xl font-semibold">Travel</h1>
+    </div>
+  );
 }

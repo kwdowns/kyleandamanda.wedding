@@ -23,20 +23,22 @@ export default function PhotoGallery({
 }: PhotoGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-
+  const galleryImages = useMemo(() => {
+    // shuffle the order of the photos
+    return Array.from(photos).sort(() => Math.random() - 0.5);
+  }, [photos]);
   return (
     <div className="mt-8">
       {title && <h2 className="text-center text-2xl ">{title}</h2>}
-      <button onClick={() => {}}>🔀</button>
       <PhotoAlbum
-        photos={photos}
+        photos={galleryImages}
         renderPhoto={(props) =>
           GalleryImage({
             ...props,
             onClick: () => {
               setLightboxOpen(true);
               setLightboxIndex(
-                photos.findIndex((photo) => photo.src === props.photo.src),
+                galleryImages.findIndex((photo) => photo.src === props.photo.src),
               );
             },
           })
@@ -65,13 +67,13 @@ export default function PhotoGallery({
           open={lightboxOpen}
           close={() => setLightboxOpen(false)}
           index={lightboxIndex}
-          slides={photos.map((image) => ({ src: image.src }))}
+          slides={galleryImages.map((image) => ({ src: image.src }))}
           render={{
             slide: (props: RenderSlideProps<Slide>) =>
               LightboxImage({
                 ...props,
                 lookupStaticImageData: (src) =>
-                  photos.find((photo) => photo.src === src),
+                  galleryImages.find((photo) => photo.src === src),
               }),
           }}
           on={{
