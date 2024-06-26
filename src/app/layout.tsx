@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Kyle and Amanda",
   description:
     "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
+  
 };
 
 export default function RootLayout({
@@ -20,8 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
-      <body className={`${ebGaramond.className}`}>
+      <head>
+        <meta name="theme-color" content="#879A96" />
+      </head>
+      <body className={`${ebGaramond.className} `}>
         <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-20% vh-max bg-primary min-h-svh relative pb-80">
           <HeaderLayout />
           <main>{children}</main>
