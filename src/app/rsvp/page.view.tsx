@@ -258,6 +258,7 @@ function GuestAdditionalGuestsStep({
       <div className="grid gap-6 md:grid-cols-2">
         {Array.from({ length: guestCount }).map((_, i) => (
           <TextBox
+            key={i}
             label={`Guest ${i + 1}`}
             value={guests ? guests[i] ?? "" : ""}
             onChange={(e) => {
@@ -422,10 +423,18 @@ function RadioGroup({
       <p className="text-2xl mb-8 text-center">{label}</p>
       <ul className="grid w-full gap-6 md:grid-cols-2">
         {options.map((option) => {
-          const inputId = useId();
           return (
             <li key={option.label}>
-              <input
+              <RadioButton
+                label={option.label}
+                value={option.value}
+                checked={option.value === selected}
+                onChange={(e) => {
+                  setSelected(e.target.value);
+                  onChange(e);
+                }}
+              />
+              {/* <input
                 id={inputId}
                 type="radio"
                 radioGroup=""
@@ -445,11 +454,44 @@ function RadioGroup({
                 <div className="block w-full text-lg font-semibold">
                   {option.label}
                 </div>
-              </label>
+              </label> */}
             </li>
           );
         })}
       </ul>
+    </>
+  );
+}
+
+function RadioButton({
+  label,
+  value,
+  checked,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const inputId = useId();
+  return (
+    <>
+      <input
+        id={inputId}
+        type="radio"
+        radioGroup=""
+        value={value}
+        checked={checked}
+        onChange={onChange}
+        className="peer hidden"
+      />
+      <label
+        htmlFor={inputId}
+        className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light hover:peer-checked:bg-tertiary-light"
+      >
+        <div className="block w-full text-lg font-semibold">{label}</div>
+      </label>
     </>
   );
 }

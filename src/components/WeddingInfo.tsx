@@ -17,13 +17,13 @@ export function WeddingInfo({
   state = wedding.state,
   street = wedding.street,
   zip = wedding.zip,
-  showMap = true
+  showMap = true,
 }: WeddingInfoProps) {
   const daysUntil = useMemo(() => {
     const diffTime = date.getTime() - Date.now();
     const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return days;
-  }, [])
+  }, [date]);
   return (
     <div className="grid grid-rows-1 gap-4 text-xl text-center">
       <div className="flex flex-row items-center justify-evenly">
@@ -36,9 +36,7 @@ export function WeddingInfo({
           {city}, {state} {zip}
         </p>
       </div>
-      {showMap && (<MapView/>)}
+      {showMap && <MapView />}
     </div>
   );
 }
-
-

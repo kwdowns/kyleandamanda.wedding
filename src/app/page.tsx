@@ -13,10 +13,14 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="w-full mx-auto lg:w-4/5 xl:w-2/3 2xl:w-1/2">
-        <Image src={hero} alt="" className="p-2 bg-primary-light rounded-md border-2 border-primary-dark shadow-md my-8" />
-        <p className="text-2xl text-center">We&apos;re getting Married!</p>
-        <WeddingInfo showMap={false}/>
-        <FaqSection />
+      <Image
+        src={hero}
+        alt=""
+        className="p-2 bg-primary-light rounded-md border-2 border-primary-dark shadow-md my-8"
+      />
+      <p className="text-2xl text-center">We&apos;re getting Married!</p>
+      <WeddingInfo showMap={false} />
+      <FaqSection />
     </div>
   );
 }

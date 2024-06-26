@@ -26,10 +26,8 @@ export default function PhotoGallery({
 
   return (
     <div className="mt-8">
-      {title && (<h2 className="text-center text-2xl ">{title}</h2>)}
-      <button onClick={() => {
-        
-      }}>🔀</button>
+      {title && <h2 className="text-center text-2xl ">{title}</h2>}
+      <button onClick={() => {}}>🔀</button>
       <PhotoAlbum
         photos={photos}
         renderPhoto={(props) =>
@@ -56,7 +54,7 @@ export default function PhotoGallery({
           if (containerWidth < 1200) {
             return 3;
           }
-          if (containerWidth < 1600){
+          if (containerWidth < 1600) {
             return 4;
           }
           return 5;
