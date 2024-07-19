@@ -1,4 +1,4 @@
-export const faqs = [
+export const faqs: { question: string, answer?: string }[] = [
   {
     question: "Where is the wedding taking place?",
     answer: "The Jewel KC Kansas City, MO",

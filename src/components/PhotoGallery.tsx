@@ -38,7 +38,9 @@ export default function PhotoGallery({
             onClick: () => {
               setLightboxOpen(true);
               setLightboxIndex(
-                galleryImages.findIndex((photo) => photo.src === props.photo.src),
+                galleryImages.findIndex(
+                  (photo) => photo.src === props.photo.src,
+                ),
               );
             },
           })

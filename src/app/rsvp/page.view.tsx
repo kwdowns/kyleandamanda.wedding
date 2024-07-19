@@ -4,6 +4,7 @@ import { AttendingStatus, RsvpInviteModel } from "../../client/rsvp";
 import { useId, useState, useTransition } from "react";
 import Link from "next/link";
 import * as rsvpApi from "../../client/rsvp";
+import MainContent from "@/components/MainContent";
 
 export interface RsvpFormProps {
   name: string;
@@ -71,127 +72,125 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
   }
 
   return (
-    <>
+    <MainContent>
       <h1 className="text-center mt-8 text-4xl mb-12">RSVP</h1>
-      <div className="w-4/5 md:w-3/4 xl:w-1/2 2xl:w-1/3 mx-auto">
-        {step === "ScanQR" && (
-          <div className="text-center">
-            <p>Please scan the QR code on your invitation to RSVP</p>
-            <p className="mt-4">
-              If you are having trouble, please contact us directly at{" "}
-              <a href="mailto:rsvp@kyleandamanda.wedding">
-                rsvp@kyleandamanda.wedding
-              </a>
-            </p>
-          </div>
-        )}
-        {step === "IsGuestAttending" && (
-          <IsGuestAttendingStep
-            invite={invite}
-            onSubmit={(status: AttendingStatus) => {
-              console.log("accepting invite", invite);
-              if (status === "Declined") {
-                startTransition(async () => {
-                  setInvite({ ...invite, attendingStatus: status });
-                  let resp = submitResponse({
-                    ...invite,
-                    attendingStatus: status,
-                  });
-                  setStep("Declined");
-                  await resp;
-                });
-              } else if (status === "Attending") {
-                startTransition(() => {
-                  setInvite({ ...invite, attendingStatus: status });
-                  let hasAdditionalGuests = Math.max(
-                    invite.additionalGuestNames.length,
-                    invite.inviteCount,
-                  );
-                  if (hasAdditionalGuests > 0) {
-                    setStep("GuestAdditionalGuests");
-                  } else {
-                    setStep("GuestFoodPreference");
-                  }
-                });
-              }
-            }}
-          />
-        )}
-        {step === "GuestAdditionalGuests" && (
-          <GuestAdditionalGuestsStep
-            invite={invite}
-            onSubmit={(guests: string[]) => {
-              console.log("submitting additional guests", invite);
-              startTransition(() => {
-                setInvite({ ...invite, additionalGuestNames: guests });
-                setStep("GuestFoodPreference");
-              });
-            }}
-          />
-        )}
-        {step === "GuestFoodPreference" && (
-          <GuestFoodPreferenceStep
-            invite={invite}
-            onSubmit={(foodPreference: string) => {
-              console.log("submitting food preference", invite);
-              startTransition(() => {
-                setInvite({ ...invite, foodPreference: foodPreference });
-                setStep("GuestComments");
-              });
-            }}
-          />
-        )}
-        {step === "GuestComments" && (
-          <GuestCommentsStep
-            invite={invite}
-            onSubmit={(comments: string) => {
-              console.log("submitting comments", invite);
+      {step === "ScanQR" && (
+        <div className="text-center">
+          <p>Please scan the QR code on your invitation to RSVP</p>
+          <p className="mt-4">
+            If you are having trouble, please contact us directly at{" "}
+            <a href="mailto:rsvp@kyleandamanda.wedding">
+              rsvp@kyleandamanda.wedding
+            </a>
+          </p>
+        </div>
+      )}
+      {step === "IsGuestAttending" && (
+        <IsGuestAttendingStep
+          invite={invite}
+          onSubmit={(status: AttendingStatus) => {
+            console.log("accepting invite", invite);
+            if (status === "Declined") {
               startTransition(async () => {
-                let resp = await submitResponse({
+                setInvite({ ...invite, attendingStatus: status });
+                let resp = submitResponse({
                   ...invite,
-                  comments: comments,
+                  attendingStatus: status,
                 });
-                setInvite({
-                  ...invite,
-                  comments: comments,
-                  id: resp ?? invite.id,
-                });
-                setStep("Submitted");
+                setStep("Declined");
+                await resp;
               });
-            }}
-          />
-        )}
-        {step === "Declined" && (
-          <div>
-            <p>
-              Thank you for letting us know you won&apos;t be able to make it.
-            </p>
-            <p>We hope to see you at the next event!</p>
-            <p>
-              If you change your mind use this link{" "}
-              <Link href={`/rsvp/${invite.id}`} /> to update your RSVP or
-              contact us directly before :TODO:rsvp-due-date:.
-            </p>
+            } else if (status === "Attending") {
+              startTransition(() => {
+                setInvite({ ...invite, attendingStatus: status });
+                let hasAdditionalGuests = Math.max(
+                  invite.additionalGuestNames.length,
+                  invite.inviteCount,
+                );
+                if (hasAdditionalGuests > 0) {
+                  setStep("GuestAdditionalGuests");
+                } else {
+                  setStep("GuestFoodPreference");
+                }
+              });
+            }
+          }}
+        />
+      )}
+      {step === "GuestAdditionalGuests" && (
+        <GuestAdditionalGuestsStep
+          invite={invite}
+          onSubmit={(guests: string[]) => {
+            console.log("submitting additional guests", invite);
+            startTransition(() => {
+              setInvite({ ...invite, additionalGuestNames: guests });
+              setStep("GuestFoodPreference");
+            });
+          }}
+        />
+      )}
+      {step === "GuestFoodPreference" && (
+        <GuestFoodPreferenceStep
+          invite={invite}
+          onSubmit={(foodPreference: string) => {
+            console.log("submitting food preference", invite);
+            startTransition(() => {
+              setInvite({ ...invite, foodPreference: foodPreference });
+              setStep("GuestComments");
+            });
+          }}
+        />
+      )}
+      {step === "GuestComments" && (
+        <GuestCommentsStep
+          invite={invite}
+          onSubmit={(comments: string) => {
+            console.log("submitting comments", invite);
+            startTransition(async () => {
+              let resp = await submitResponse({
+                ...invite,
+                comments: comments,
+              });
+              setInvite({
+                ...invite,
+                comments: comments,
+                id: resp ?? invite.id,
+              });
+              setStep("Submitted");
+            });
+          }}
+        />
+      )}
+      {step === "Declined" && (
+        <div>
+          <p>
+            Thank you for letting us know you won&apos;t be able to make it.
+          </p>
+          <p>We hope to see you at the next event!</p>
+          <p>
+            If you change your mind use this link{" "}
+            <Link href={`/rsvp/${invite.id}`} /> to update your RSVP or
+            contact us directly before :TODO:rsvp-due-date:.
+          </p>
 
-            <Link href="/">Return to the homepage</Link>
-          </div>
-        )}
-        {step === "Submitted" && (
-          <div>
-            <p>Thank you for your RSVP!</p>
-            <p>We can&apos;t wait to see you at the wedding!</p>
-            <p>Add a reminder to your calendar:</p>
-            <AddToCalendar />
-            <p>
-              If need to make any changes use this link{" "}
-              <Link href={`/rsvp/${invite.id}`}>this link</Link> to update your
-              RSVP details or contact us directly before :TODO:rsvp-due-date:.
-            </p>
-            <Link href="/">Return to the homepage</Link>
-          </div>
-        )}
-      </div>
-    </>
+          <Link href="/">Return to the homepage</Link>
+        </div>
+      )}
+      {step === "Submitted" && (
+        <div>
+          <p>Thank you for your RSVP!</p>
+          <p>We can&apos;t wait to see you at the wedding!</p>
+          <p>Add a reminder to your calendar:</p>
+          <AddToCalendar />
+          <p>
+            If need to make any changes use this link{" "}
+            <Link href={`/rsvp/${invite.id}`}>this link</Link> to update your
+            RSVP details or contact us directly before :TODO:rsvp-due-date:.
+          </p>
+          <Link href="/">Return to the homepage</Link>
+        </div>
+      )}
+    </MainContent>
   );
 }
 

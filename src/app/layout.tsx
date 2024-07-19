@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Kyle and Amanda",
   description:
     "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
-  
 };
 
 export default function RootLayout({
@@ -43,6 +42,9 @@ const NavBarLayout = () => {
     <nav className={`flex justify-around ${inter.className} text-black`}>
       <Link href="/" className="">
         Home
+      </Link>
+      <Link href="/faq">
+        FAQ
       </Link>
       <Link href="/gallery" className="">
         Gallery
