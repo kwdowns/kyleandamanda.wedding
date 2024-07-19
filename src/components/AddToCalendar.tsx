@@ -1,6 +1,6 @@
 "use client";
 import { EventAttributes, createEvent } from "ics";
-
+import { weddingDate } from "@/constants/wedding";
 export default function AddToCalendar() {
   return (
     <button
@@ -14,7 +14,8 @@ export default function AddToCalendar() {
 
 async function createCalendarEvent() {
   const event: EventAttributes = {
-    start: [2025, 6, 14, 22, 0],
+    start: weddingDate,
+    startInputType: "utc",
     duration: { hours: 5, minutes: 0 },
     title: "Kyle and Amanda's Wedding",
     description: "Kyle and Amanda are getting married!",
