@@ -1,3 +1,4 @@
+import MainContent from "@/components/MainContent";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,8 +7,14 @@ export const metadata: Metadata = {
 
 export default function Travel() {
   return (
-    <div className="w-full mx-auto lg:w-4/5 xl:w-2/3 2xl:w-1/2">
+    <MainContent>
+      
+      <header>
       <h1 className="text-center text-4xl font-semibold">Travel</h1>
-    </div>
+      </header>
+      <article>
+        
+      </article>
+    </MainContent>
   );
 }

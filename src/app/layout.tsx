@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import Link from "next/link";
+import Image from "next/image";
 import "./globals.css";
+import siteIcon from "@/../public/icon.png"
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -9,8 +11,8 @@ const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kyle and Amanda",
-  description:
-    "Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
+  description:"Kyle and Amanda's wedding will be on June 14, 2025 in Kansas City",
+  
 };
 
 export default function RootLayout({
@@ -39,17 +41,24 @@ export default function RootLayout({
 
 const NavBarLayout = () => {
   return (
-    <nav className={`flex justify-around ${inter.className} text-black`}>
-      <Link href="/" className="">
-        Home
+    <nav className={`flex justify-around ${inter.className} text-black items-center`}>
+      <Link href="/">
+        <Image 
+          src={siteIcon}
+          alt="" 
+          className=""
+          width={40}
+          height={40} 
+          sizes={"calc("}
+        />
       </Link>
       <Link href="/faq">
         FAQ
       </Link>
-      <Link href="/gallery" className="">
+      <Link href="/gallery">
         Gallery
       </Link>
-      <Link href="/registry" className="hidden">
+      <Link href="/registry">
         Registry
       </Link>
       <Link href="/rsvp" className="hidden">
