@@ -8,13 +8,10 @@ export const metadata: Metadata = {
 export default function Travel() {
   return (
     <MainContent>
-      
       <header>
-      <h1 className="text-center text-4xl font-semibold">Travel</h1>
+        <h1 className="text-center text-4xl font-semibold">Travel</h1>
       </header>
-      <article>
-        
-      </article>
+      <article></article>
     </MainContent>
   );
 }

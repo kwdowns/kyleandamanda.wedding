@@ -27,15 +27,17 @@ export function WeddingInfo({
       <div className="">
         <h2 className="text-2xl">When</h2>
         <div>
-          <time dateTime={date.toISOString()}>{date.toLocaleDateString("en-us",{
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-          })}</time>
+          <time dateTime={date.toISOString()}>
+            {date.toLocaleDateString("en-us", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+            })}
+          </time>
           <p>{daysUntil} days to go!</p>
         </div>
-        <AddToCalendar/>
+        <AddToCalendar />
       </div>
       <div>
         <h2 className="text-2xl">Where</h2>
@@ -47,7 +49,6 @@ export function WeddingInfo({
           </p>
         </address>
       </div>
-      
     </div>
   );
 }

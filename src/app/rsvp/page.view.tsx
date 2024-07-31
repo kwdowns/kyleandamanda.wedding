@@ -169,8 +169,8 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           <p>We hope to see you at the next event!</p>
           <p>
             If you change your mind use this link{" "}
-            <Link href={`/rsvp/${invite.id}`} /> to update your RSVP or
-            contact us directly before :TODO:rsvp-due-date:.
+            <Link href={`/rsvp/${invite.id}`} /> to update your RSVP or contact
+            us directly before :TODO:rsvp-due-date:.
           </p>
 
           <Link href="/">Return to the homepage</Link>
