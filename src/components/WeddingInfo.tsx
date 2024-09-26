@@ -1,3 +1,4 @@
+
 import { wedding, weddingDate, localStartTime } from "@/constants/wedding";
 import { useMemo } from "react";
 import AddToCalendar from "./AddToCalendar";
@@ -17,11 +18,9 @@ export function WeddingInfo({
   street = wedding.street,
   zip = wedding.zip,
 }: WeddingInfoProps) {
-  const daysUntil = useMemo(() => {
-    const diffTime = date.getTime() - Date.now();
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return days;
-  }, [date]);
+
+  const daysUntil = Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+
   return (
     <div className="flex flex-row items-center justify-evenly text-center">
       <div className="">

@@ -1,6 +1,5 @@
 "use client";
 import { EventAttributes, createEvent } from "ics";
-import { weddingDate } from "@/constants/wedding";
 export default function AddToCalendar() {
   return (
     <button

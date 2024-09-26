@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import "./globals.css";
 import siteIcon from "@/../public/icon.png";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
@@ -31,7 +30,6 @@ export default function RootLayout({
           <main>{children}</main>
           <footer className="pb-36 mx-auto w-full absolute bottom-0 inset-x-0">
             <KandAFooter />
-            <SpeedInsights />
           </footer>
         </div>
       </body>
@@ -48,10 +46,9 @@ const NavBarLayout = () => {
         <Image
           src={siteIcon}
           alt=""
-          className=""
           width={40}
           height={40}
-          sizes={"calc("}
+          sizes={"calc(40 * 1.5)"}
         />
       </Link>
       <Link href="/faq">FAQ</Link>
