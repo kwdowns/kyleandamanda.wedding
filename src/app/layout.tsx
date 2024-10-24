@@ -47,8 +47,6 @@ const NavBarLayout = () => {
           src={siteIcon}
           alt=""
           width={40}
-          height={40}
-          sizes={"calc(40 * 1.5)"}
         />
       </Link>
       <Link href="/faq">FAQ</Link>

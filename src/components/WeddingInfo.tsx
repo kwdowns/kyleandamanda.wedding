@@ -1,33 +1,27 @@
-
-import { wedding, weddingDate, localStartTime } from "@/constants/wedding";
-import { useMemo } from "react";
+"use client";
+import { wedding } from "@/constants/wedding";
+import { useEffect, useState } from "react";
 import AddToCalendar from "./AddToCalendar";
 
-export interface WeddingInfoProps {
-  date?: Date;
-  city?: string;
-  state?: string;
-  street?: string;
-  zip?: string;
-}
+export function WeddingInfo() {
 
-export function WeddingInfo({
-  date = wedding.date,
-  city = wedding.city,
-  state = wedding.state,
-  street = wedding.street,
-  zip = wedding.zip,
-}: WeddingInfoProps) {
-
-  const daysUntil = Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-
+  const [daysUntil, setDaysUntil] = useState(getDaysUntil());
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newDaysUntil = getDaysUntil();
+      if(newDaysUntil !== daysUntil){
+        setDaysUntil(newDaysUntil);
+      }
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  })
   return (
     <div className="flex flex-row items-center justify-evenly text-center">
       <div className="">
         <h2 className="text-2xl">When</h2>
         <div>
-          <time dateTime={date.toISOString()}>
-            {date.toLocaleDateString("en-us", {
+          <time dateTime={wedding.date.toISOString()}>
+            {wedding.date.toLocaleDateString("en-us", {
               month: "long",
               day: "numeric",
               year: "numeric",
@@ -42,12 +36,16 @@ export function WeddingInfo({
         <h2 className="text-2xl">Where</h2>
         <p>The Jewel KC</p>
         <address>
-          <p>{street}</p>
+          <p>{wedding.street}</p>
           <p>
-            {city}, {state} {zip}
+            {wedding.city}, {wedding.state} {wedding.zip}
           </p>
         </address>
       </div>
     </div>
   );
+}
+
+function getDaysUntil(){
+  return Math.ceil((wedding.date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 }

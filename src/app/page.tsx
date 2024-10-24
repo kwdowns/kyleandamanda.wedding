@@ -16,6 +16,7 @@ export default function Home() {
         src={landingImage}
         alt=""
         className="p-2 mt-4 bg-primary-light rounded-md border-2 border-primary-dark shadow-md"
+        priority={true}
       />
       <h1 className="text-center text-4xl font-light py-8">Kyle & Amanda</h1>
       <h2 className="text-2xl text-center py-8">We&apos;re getting Married!</h2>
