@@ -5,7 +5,7 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "What time is the ceremony? What time is the reception?",
-    answer: "UPDATE",
+    answer: "The ceremony will begin at 5:00 PM, followed by the reception.",
   },
   {
     question: "What is the dress code? What should I wear?",
@@ -22,7 +22,7 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "What should I expect after the ceremony?",
-    answer: "UPDATE",
+    answer: "We will have a cocktail hour followed by dinner and dancing.",
   },
   {
     question:
@@ -32,11 +32,11 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "How do I RSVP?",
-    answer: "UPDATE",
+    answer: "The RSVP card sent to you has a QR code printed on it. Scan the code with your phone's camera to go to your RSVP page, or use the link on the card under the QR code. After you RSVP you can update your details using that same link. Alternatively, you can contact us directly.",
   },
   {
     question: "When is the RSVP deadline?",
-    answer: "UPDATE",
+    answer: "Please RSVP by February 1st, 2025.",
   },
   {
     question: "Can I bring my kids? Will there be a babysitter?",
@@ -46,11 +46,11 @@ export const faqs: { question: string; answer?: string }[] = [
   {
     question:
       "Do you have a hotel block for guests? Where do you recommend I stay?",
-    answer: "UPDATE",
+    answer: "We are still working on this and will update this page when we have more information.",
   },
   {
     question: "Are the ceremony and reception locations wheelchair accessible?",
-    answer: "UPDATE",
+    answer: "Yes, both locations are wheelchair accessible.",
   },
   {
     question:
@@ -70,7 +70,7 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "Are you registered? Where should we ship your gift?",
-    answer: "UPDATE",
+    answer: "Yes we are registered, you can find more information on our registry page on this site. Please ship gifts to our home address at 8515 Lowell Ave, Overland Park, KS 66212.",
   },
   {
     question: "Can I take and post pictures of the wedding on social media?",
@@ -80,6 +80,6 @@ export const faqs: { question: string; answer?: string }[] = [
   {
     question:
       "I have a question that I just can’t find the answer to, what is the best way to contact you?",
-    answer: "UPDATE",
+    answer: "You can reach out to either of us directly or email us at info@kyleandamanda.wedding",
   },
 ];
