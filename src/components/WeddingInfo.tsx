@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import AddToCalendar from "./AddToCalendar";
 
 export function WeddingInfo() {
-
   const [daysUntil, setDaysUntil] = useState(getDaysUntil());
   useEffect(() => {
     const interval = setInterval(() => {
@@ -12,7 +11,7 @@ export function WeddingInfo() {
       if(newDaysUntil !== daysUntil){
         setDaysUntil(newDaysUntil);
       }
-    }, 60 * 1000);
+    }, 1000);
     return () => clearInterval(interval);
   })
   return (
@@ -25,7 +24,6 @@ export function WeddingInfo() {
               month: "long",
               day: "numeric",
               year: "numeric",
-              hour: "numeric",
             })}
           </time>
           <p>{daysUntil} days to go!</p>
@@ -47,5 +45,8 @@ export function WeddingInfo() {
 }
 
 function getDaysUntil(){
-  return Math.ceil((wedding.date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const weddingDate = new Date(wedding.date);
+  weddingDate.setHours(0, 0, 0, 0); // Set the time to midnight
+  const days = Math.ceil((weddingDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  return days;
 }
