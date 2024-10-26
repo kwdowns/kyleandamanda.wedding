@@ -8,12 +8,12 @@ export function WeddingInfo() {
   useEffect(() => {
     const interval = setInterval(() => {
       const newDaysUntil = getDaysUntil();
-      if(newDaysUntil !== daysUntil){
+      if (newDaysUntil !== daysUntil) {
         setDaysUntil(newDaysUntil);
       }
     }, 1000);
     return () => clearInterval(interval);
-  })
+  });
   return (
     <div className="flex flex-row items-center justify-evenly text-center">
       <div className="">
@@ -44,9 +44,11 @@ export function WeddingInfo() {
   );
 }
 
-function getDaysUntil(){
+function getDaysUntil() {
   const weddingDate = new Date(wedding.date);
   weddingDate.setHours(0, 0, 0, 0); // Set the time to midnight
-  const days = Math.ceil((weddingDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const days = Math.ceil(
+    (weddingDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+  );
   return days;
 }

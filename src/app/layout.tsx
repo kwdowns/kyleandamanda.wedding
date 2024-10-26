@@ -43,11 +43,7 @@ const NavBarLayout = () => {
       className={`flex justify-around ${inter.className} text-black items-center`}
     >
       <Link href="/">
-        <Image
-          src={siteIcon}
-          alt=""
-          width={40}
-        />
+        <Image src={siteIcon} alt="" width={40} />
       </Link>
       <Link href="/faq">FAQ</Link>
       <Link href="/gallery">Gallery</Link>

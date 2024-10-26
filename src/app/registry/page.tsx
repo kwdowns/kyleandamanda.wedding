@@ -11,8 +11,8 @@ export default function Registry() {
       <h1 className="text-4xl mt-4 text-center">Registry</h1>
       <p className="max-w-1/2 text-pretty my-4 text-lg">
         Thank you for considering a gift for our wedding! We are registered at
-        Amazon and Target. If it gives you the option to select a day of the
-        week for shipping, prefer either Monday or Friday.
+        Amazon and Target. If you are shipping a gift, please ship to our home
+        address at <address>8515 Lowell Ave, Overland Park, KS 66212</address>
       </p>
       <div className="flex flex-col space-y-8 mt-8 items-center">
         <RegistryLink

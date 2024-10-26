@@ -69,17 +69,8 @@ export const faqs: { question: string; answer?: string }[] = [
     answer: "Yes.",
   },
   {
-    question: "Are you registered? Where should we ship your gift?",
-    answer: "Yes we are registered, you can find more information on our registry page on this site. Please ship gifts to our home address at 8515 Lowell Ave, Overland Park, KS 66212.",
-  },
-  {
     question: "Can I take and post pictures of the wedding on social media?",
     answer:
       "We love photos! We do ask that you refrain from taking photos during the ceremony, we’d like that time to be unplugged. For the rest of the wedding, we encourage guests to post pictures so we can see them, too!",
-  },
-  {
-    question:
-      "I have a question that I just can’t find the answer to, what is the best way to contact you?",
-    answer: "You can reach out to either of us directly or email us at info@kyleandamanda.wedding",
   },
 ];
