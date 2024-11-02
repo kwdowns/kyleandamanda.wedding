@@ -1,7 +1,7 @@
 export const faqs: { question: string; answer?: string }[] = [
   {
     question: "Where is the wedding taking place?",
-    answer: "The Jewel KC Kansas City, MO",
+    answer: "The Jewel KC in Kansas City, MO.",
   },
   {
     question: "What time is the ceremony? What time is the reception?",
@@ -10,12 +10,9 @@ export const faqs: { question: string; answer?: string }[] = [
   {
     question: "What is the dress code? What should I wear?",
     answer:
-      "The dress code for our wedding is semiformal. Wear something you’re comfortable in!",
+      "The dress code for our wedding is semiformal. We want you to feel comfortable and enjoy the day, so please wear what makes you feel best!",
   },
-  {
-    question: "What weather should I expect?",
-    answer: "Hot and humid",
-  },
+  
   {
     question: "Will the wedding be indoors or outdoors?",
     answer: "The wedding will be indoors.",
@@ -28,7 +25,7 @@ export const faqs: { question: string; answer?: string }[] = [
     question:
       "Will transportation be provided? Is there easy parking at the venue?",
     answer:
-      "We are not providing any formal transportation for the events, but our ceremony and reception are taking place in the same area. There is ample parking for those who feel comfortable driving, and Lyft is a great option for those who don’t. Please stay safe and default to a ride service or carpooling if you plan to drink.",
+      "We are not providing any formal transportation for the events, but our ceremony and reception are taking place in the same location. There is ample parking for those who feel comfortable driving, and Lyft is a great option for those who don’t. Please stay safe and default to a ride service or carpooling if you plan to drink.",
   },
   {
     question: "How do I RSVP?",
@@ -36,12 +33,12 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "When is the RSVP deadline?",
-    answer: "Please RSVP by February 1st, 2025.",
+    answer: "Please RSVP by Friday May 9th, 2025.",
   },
   {
     question: "Can I bring my kids? Will there be a babysitter?",
     answer:
-      "Since we have a large extended family, we’ve chosen to limit our guest list to fourteen-year-olds and over, and we hope you understand. Let us know if there is anything we can do to help.",
+      "Since we have a large extended family, we’ve chosen to limit our guest list to thirteen-year-olds and over, and we hope you understand. Let us know if there is anything we can do to help.",
   },
   {
     question:
@@ -62,7 +59,7 @@ export const faqs: { question: string; answer?: string }[] = [
     question:
       "I have dietary restrictions, what’s the best way to communicate that with you?",
     answer:
-      "We definitely want to make sure you enjoy your time and meal on our wedding day, please let us know when you RSVP about your dietary needs.",
+      "We definitely want to make sure you enjoy your time and meal on our wedding day, please let us know when you RSVP about your dietary needs. Contacting us directly through text is a great way to communicate the details.",
   },
   {
     question: "Will there be an open bar?",
@@ -71,6 +68,6 @@ export const faqs: { question: string; answer?: string }[] = [
   {
     question: "Can I take and post pictures of the wedding on social media?",
     answer:
-      "We love photos! We do ask that you refrain from taking photos during the ceremony, we’d like that time to be unplugged. For the rest of the wedding, we encourage guests to post pictures so we can see them, too!",
+      "We love photos! We do ask that you refrain from taking photos during the ceremony, we’d like that time to be unplugged. For the rest of the wedding, we encourage guests to post pictures and tag Amanda so we can see them, too!",
   },
 ];
