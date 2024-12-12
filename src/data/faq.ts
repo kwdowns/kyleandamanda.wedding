@@ -12,7 +12,7 @@ export const faqs: { question: string; answer?: string }[] = [
     answer:
       "The dress code for our wedding is semiformal. We want you to feel comfortable and enjoy the day, so please wear what makes you feel best!",
   },
-  
+
   {
     question: "Will the wedding be indoors or outdoors?",
     answer: "The wedding will be indoors.",
@@ -29,7 +29,8 @@ export const faqs: { question: string; answer?: string }[] = [
   },
   {
     question: "How do I RSVP?",
-    answer: "The RSVP card sent to you has a QR code printed on it. Scan the code with your phone's camera to go to your RSVP page, or use the link on the card under the QR code. After you RSVP you can update your details using that same link. Alternatively, you can contact us directly.",
+    answer:
+      "The RSVP card sent to you has a QR code printed on it. Scan the code with your phone's camera to go to your RSVP page, or use the link on the card under the QR code. After you RSVP you can update your details using that same link. Alternatively, you can contact us directly.",
   },
   {
     question: "When is the RSVP deadline?",
@@ -43,7 +44,8 @@ export const faqs: { question: string; answer?: string }[] = [
   {
     question:
       "Do you have a hotel block for guests? Where do you recommend I stay?",
-    answer: "We are still working on this and will update this page when we have more information.",
+    answer:
+      "We are still working on this and will update this page when we have more information.",
   },
   {
     question: "Are the ceremony and reception locations wheelchair accessible?",

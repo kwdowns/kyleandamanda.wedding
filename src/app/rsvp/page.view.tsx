@@ -243,7 +243,7 @@ function GuestAdditionalGuestsStep({
   const [guests, setGuests] = useState<string[]>(
     Array.from({ length: guestCount }).map((_, i) =>
       (invite.additionalGuestNames
-        ? (invite.additionalGuestNames[i] ?? "")
+        ? invite.additionalGuestNames[i] ?? ""
         : ""
       ).toString(),
     ),
@@ -259,7 +259,7 @@ function GuestAdditionalGuestsStep({
           <TextBox
             key={i}
             label={`Guest ${i + 1}`}
-            value={guests ? (guests[i] ?? "") : ""}
+            value={guests ? guests[i] ?? "" : ""}
             onChange={(e) => {
               const newGuests = guests ? [...guests] : [];
               newGuests[i] = e.target.value;
