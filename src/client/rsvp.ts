@@ -1,4 +1,14 @@
-const apiBaseUrl: string = "https://api.kyleandamanda.wedding";
+const apiBaseUrl = process.env.WEDDING_API_BASE_URL;
+const apiKey = process.env.WEDDING_API_KEY;
+const apiKeyHeader = "X-Api-Key";
+
+if(!apiBaseUrl) {
+  throw new Error("WEDDING_API_BASE_URL is not defined");
+}
+
+if(!apiKey) {
+  throw new Error("WEDDING_API_KEY is not defined");
+}
 
 export type AttendingStatus = "AwaitingResponse" | "Declined" | "Attending";
 export type RsvpInviteModel = {
@@ -35,8 +45,11 @@ export type SubmitRsvpRequest = { body: SubmitRsvpRequestBody };
 export async function getRsvpInvite(
   rsvpCode: string,
 ): Promise<RsvpInviteModel | null> {
-  // rsvpCode is a query string parameter
-  const response = await fetch(`${apiBaseUrl}/api/rsvp?code=${rsvpCode}`);
+  const response = await fetch(`${apiBaseUrl}/rsvp/${rsvpCode}`, {
+    headers:{
+      ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
+    }
+  });
   if (response.status == 204) {
     return null;
   } else if (response.status != 200) {
@@ -50,11 +63,12 @@ export async function getRsvpInvite(
 export async function submitRsvpInvite(
   request: SubmitRsvpRequest,
 ): Promise<string> {
-  const response = await fetch(`${apiBaseUrl}/api/rsvp`, {
+  const response = await fetch(`${apiBaseUrl}/rsvp`, {
     body: JSON.stringify(request.body),
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     },
   });
 
@@ -70,11 +84,12 @@ export async function submitRsvpInvite(
 export async function updateRsvpInvite(
   request: UpdateRsvpRequest,
 ): Promise<void> {
-  const response = await fetch(`${apiBaseUrl}/api/rsvp/${request.rsvpCode}`, {
+  const response = await fetch(`${apiBaseUrl}/rsvp/${request.rsvpCode}`, {
     body: JSON.stringify(request.body),
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     },
   });
 

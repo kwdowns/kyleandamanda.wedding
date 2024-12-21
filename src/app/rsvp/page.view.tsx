@@ -295,7 +295,7 @@ function GuestFoodPreferenceStep({
   return (
     <div className="flex flex-col">
       <TextArea
-        label={"Do you have any dietary restrictions or food preferences?"}
+        label={"Do you have any dietary restrictions?"}
         value={foodPreference}
         onChange={(e) => setFoodPreference(e.target.value)}
       />
