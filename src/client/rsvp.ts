@@ -1,6 +1,8 @@
+'use server';
+
 const apiBaseUrl = process.env.WEDDING_API_BASE_URL;
 const apiKey = process.env.WEDDING_API_KEY;
-const apiKeyHeader = "X-Api-Key";
+const apiKeyHeader = "X-API-KEY";
 
 if(!apiBaseUrl) {
   throw new Error("WEDDING_API_BASE_URL is not defined");
@@ -50,10 +52,12 @@ export async function getRsvpInvite(
       ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     }
   });
+  console.log(response);
   if (response.status == 204) {
     return null;
   } else if (response.status != 200) {
-    throw new Error(`Failed to fetch RSVP invite: ${response.statusText}`);
+    console.warn(`Failed to fetch RSVP invite: ${response.statusText}`);
+    return null;
   }
 
   const rsvpModel: RsvpInviteModel = (await response.json()) as RsvpInviteModel;
@@ -71,7 +75,7 @@ export async function submitRsvpInvite(
       ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     },
   });
-
+  console.log(response);
   if (response.status != 200) {
     throw new Error(`Failed to submit RSVP: ${response.statusText}`);
   }
@@ -92,7 +96,7 @@ export async function updateRsvpInvite(
       ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     },
   });
-
+  console.log(response);
   if (response.status != 200) {
     throw new Error(`Failed to update RSVP: ${response.statusText}`);
   }
