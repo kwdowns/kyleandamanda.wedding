@@ -79,7 +79,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           <input
             type="text"
             value={party.partyCode}
-            placeholder="Enter your 6-digit code"
+            placeholder="Enter your code"
             onChange={async (e) => {
               setParty({ ...party, partyCode: e.target.value });
               if (e.target.value.length >= 5) {
@@ -173,18 +173,26 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
         </div>
       )}
       {step === "Submitted" && (
-        <div>
+        <div className="text-2xl">
           <p>Thank you for your RSVP!</p>
           <p>We can&apos;t wait to see you at the wedding!</p>
-          <p>Add a reminder to your calendar:</p>
-          <AddToCalendar />
+
           <p>
             If need to make any changes use this link{" "}
-            <Link href={`/rsvp/${party.partyCode}`}>this link</Link> to update
-            your RSVP details or contact us directly before
-            :TODO:rsvp-due-date:.
+            <Link
+              href={`/rsvp/${party.partyCode}`}
+              className="text-blue-500 hover:underline"
+            >
+              {window.location.href}
+            </Link>{" "}
+            to update your RSVP details or contact us directly before May 16th.
           </p>
-          <Link href="/">Return to the homepage</Link>
+          <Link href="/" className="text-blue-500 hover:underline">
+            Return to the homepage
+          </Link>
+
+          <p>Add a reminder to your calendar:</p>
+          <AddToCalendar />
         </div>
       )}
     </MainContent>
