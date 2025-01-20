@@ -76,5 +76,5 @@ export async function updateParty(
     }
     throw new Error(`Failed to update RSVP: ${response.statusText}`);
   }
-  console.log('updated party', request)
+  console.log('updated party', request.rsvpCode)
 }
