@@ -48,9 +48,7 @@ const NavBarLayout = () => {
       <Link href="/faq">FAQ</Link>
       <Link href="/gallery">Gallery</Link>
       <Link href="/registry">Registry</Link>
-      <Link href="/rsvp" className="hidden">
-        RSVP
-      </Link>
+      <Link href="/rsvp">RSVP</Link>
     </nav>
   );
 };
