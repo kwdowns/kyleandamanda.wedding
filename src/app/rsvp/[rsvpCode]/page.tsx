@@ -1,4 +1,3 @@
-
 import * as rsvpApi from "../../../client/rsvp";
 import RsvpForm from "../page.view";
 import * as RSVP from "../../rsvp/page";
@@ -8,26 +7,24 @@ export default async function Page({
 }: {
   params: { rsvpCode: string };
 }) {
-  try{
-    const rsvp = await rsvpApi.getRsvpInvite(params.rsvpCode);
+  try {
+    const rsvp = await rsvpApi.getParty(params.rsvpCode);
     if (rsvp) {
       return (
         <>
           <RsvpForm
-            inviteId={rsvp.id}
-            name={rsvp.guestName}
+            partyCode={rsvp.partyCode}
             attendingStatus={rsvp.attendingStatus}
-            foodPreference={rsvp.foodPreference}
-            guests={rsvp.additionalGuestNames}
+            members={rsvp.members}
             comments={rsvp.comments}
-            inviteCount={rsvp.inviteCount}
+            partySize={rsvp.partySize}
           />
         </>
       );
     } else {
       return <RSVP.default />;
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
     return <RSVP.default />;
   }

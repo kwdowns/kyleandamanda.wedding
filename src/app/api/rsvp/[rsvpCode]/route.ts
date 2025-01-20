@@ -7,7 +7,7 @@ export async function PUT(
   console.log(request);
   const requestBody = (await request.json()) as rsvpApi.UpdateRsvpRequestBody;
   if (requestBody) {
-    await rsvpApi.updateRsvpInvite({
+    await rsvpApi.updateParty({
       rsvpCode: params.rsvpCode,
       body: requestBody,
     });
