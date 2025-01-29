@@ -23,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#879A96" />
+        <meta name="rant" content="we write semantic html in this house"/>
       </head>
       <body className={`${ebGaramond.className} `}>
         <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-20% vh-max bg-primary min-h-svh relative pb-80">
@@ -45,10 +46,8 @@ const NavBarLayout = () => {
       <Link href="/">
         <Image src={siteIcon} alt="" width={40} />
       </Link>
-      <Link href="/rsvp" className="hidden">
-        RSVP
-      </Link>
-      <Link href="/wedding-party">Wedding Party</Link>
+      <Link href="/rsvp" className="bg-secondary p-2 rounded-md">RSVP</Link>
+      {/* <Link href="/wedding-party">Wedding Party</Link> */}
       <Link href="/events">Events</Link>
       <Link href="/travel">Travel</Link>
       <Link href="/registry">Gift Registry</Link>
