@@ -8,13 +8,11 @@ export const metadata: Metadata = {
 export default function RSVP() {
   return (
     <RSVPView
-      inviteCount={0}
-      name={""}
+      partySize={0}
       attendingStatus={"AwaitingResponse"}
-      foodPreference={""}
-      guests={[]}
+      members={[]}
       comments={""}
-      inviteId={null}
+      partyCode={null}
     />
   );
 }

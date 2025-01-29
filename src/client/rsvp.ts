@@ -1,84 +1,80 @@
-const apiBaseUrl: string = "https://api.kyleandamanda.wedding";
+'use server';
+
+const apiBaseUrl = process.env.WEDDING_API_BASE_URL;
+const apiKey = process.env.WEDDING_API_KEY;
+const apiKeyHeader = "X-API-KEY";
+
+if(!apiBaseUrl) {
+  throw new Error("WEDDING_API_BASE_URL is not defined");
+}
+
+if(!apiKey) {
+  throw new Error("WEDDING_API_KEY is not defined");
+}
 
 export type AttendingStatus = "AwaitingResponse" | "Declined" | "Attending";
-export type RsvpInviteModel = {
-  id: string;
-  guestName: string;
+export type Party = {
+  partyCode: string;
   attendingStatus: AttendingStatus;
-  inviteCount: number;
-  additionalGuestNames: string[];
-  foodPreference: string;
-  comments: string;
-};
-export type SubmitRsvpRequestBody = {
-  guestName: string;
+  partySize: number;
+  comments: string | null;
+  members: PartyMember[];
+}
+export type PartyMember = {
+  firstName: string | null;
+  lastName: string | null;
+  foodRestrictions: string | null;
+}
+export type UpdatePartyRequestBody = {
   attending: boolean;
-  inviteCount: number;
-  additionalGuestNames: string[];
-  foodPreference: string;
-  comments: string;
-};
+  comments: string | null;
+  partyMembers: PartyMember[];
+}
 
-export type SubmitRsvpResponseBody = {
+export type UpdatePartyRequest = {
   rsvpCode: string;
+  body: UpdatePartyRequestBody;
 };
 
-export type UpdateRsvpRequestBody = SubmitRsvpRequestBody;
-
-export type UpdateRsvpRequest = {
-  rsvpCode: string;
-  body: UpdateRsvpRequestBody;
-};
-
-export type SubmitRsvpRequest = { body: SubmitRsvpRequestBody };
-
-export async function getRsvpInvite(
+export async function getParty(
   rsvpCode: string,
-): Promise<RsvpInviteModel | null> {
-  // rsvpCode is a query string parameter
-  const response = await fetch(`${apiBaseUrl}/api/rsvp?code=${rsvpCode}`);
-  if (response.status == 204) {
+): Promise<Party | null> {
+  const response = await fetch(`${apiBaseUrl}/rsvp/${rsvpCode}`, {
+    headers:{
+      ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
+    }
+  });
+  if (response.status == 204 || response.status == 404) {
+    console.log('unable to find party', rsvpCode);
     return null;
   } else if (response.status != 200) {
-    throw new Error(`Failed to fetch RSVP invite: ${response.statusText}`);
+    console.warn(`Failed to fetch RSVP invite: ${response.statusText}`);
+    return null;
   }
 
-  const rsvpModel: RsvpInviteModel = (await response.json()) as RsvpInviteModel;
-  return rsvpModel;
+  const party: Party = (await response.json()) as Party;
+  console.log('found party', rsvpCode);
+  return party;
 }
 
-export async function submitRsvpInvite(
-  request: SubmitRsvpRequest,
-): Promise<string> {
-  const response = await fetch(`${apiBaseUrl}/api/rsvp`, {
-    body: JSON.stringify(request.body),
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (response.status != 200) {
-    throw new Error(`Failed to submit RSVP: ${response.statusText}`);
-  }
-
-  const responseBody: SubmitRsvpResponseBody = await response.json();
-
-  return responseBody.rsvpCode;
-}
-
-export async function updateRsvpInvite(
-  request: UpdateRsvpRequest,
+export async function updateParty(
+  request: UpdatePartyRequest,
 ): Promise<void> {
-  const response = await fetch(`${apiBaseUrl}/api/rsvp/${request.rsvpCode}`, {
+  const response = await fetch(`${apiBaseUrl}/rsvp/${request.rsvpCode}`, {
     body: JSON.stringify(request.body),
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),
     },
   });
-
-  if (response.status != 200) {
+  if (!response.ok) {
+    if(response.status == 400)
+    {
+      const error = await response.json();
+      throw new Error(`Failed to update RSVP: ${error.message}`);
+    }
     throw new Error(`Failed to update RSVP: ${response.statusText}`);
   }
+  console.log('updated party', request.rsvpCode)
 }

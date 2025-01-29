@@ -7,22 +7,25 @@ export default async function Page({
 }: {
   params: { rsvpCode: string };
 }) {
-  const rsvp = await rsvpApi.getRsvpInvite(params.rsvpCode);
-  if (rsvp) {
-    return (
-      <>
-        <RsvpForm
-          inviteId={rsvp.id}
-          name={rsvp.guestName}
-          attendingStatus={rsvp.attendingStatus}
-          foodPreference={rsvp.foodPreference}
-          guests={rsvp.additionalGuestNames}
-          comments={rsvp.comments}
-          inviteCount={rsvp.inviteCount}
-        />
-      </>
-    );
-  } else {
+  try {
+    const rsvp = await rsvpApi.getParty(params.rsvpCode);
+    if (rsvp) {
+      return (
+        <>
+          <RsvpForm
+            partyCode={rsvp.partyCode}
+            attendingStatus={rsvp.attendingStatus}
+            members={rsvp.members}
+            comments={rsvp.comments}
+            partySize={rsvp.partySize}
+          />
+        </>
+      );
+    } else {
+      return <RSVP.default />;
+    }
+  } catch (e) {
+    console.error(e);
     return <RSVP.default />;
   }
 }
