@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import "./globals.css";
 import siteIcon from "@/../public/icon.png";
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
@@ -32,6 +33,7 @@ export default function RootLayout({
           <footer className="pb-36 mx-auto w-full absolute bottom-0 inset-x-0">
             <KandAFooter />
           </footer>
+          <Analytics/>
         </div>
       </body>
     </html>
