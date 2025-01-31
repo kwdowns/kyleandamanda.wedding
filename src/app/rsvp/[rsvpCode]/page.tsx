@@ -5,10 +5,11 @@ import * as RSVP from "../../rsvp/page";
 export default async function Page({
   params,
 }: {
-  params: { rsvpCode: string };
-}) {
+  params: Promise<{ rsvpCode: string }>;
+}): Promise<React.ReactNode> {
   try {
-    const rsvp = await rsvpApi.getParty(params.rsvpCode);
+    const rsvpCode = (await params).rsvpCode;
+    const rsvp = await rsvpApi.getParty(rsvpCode);
     if (rsvp) {
       return (
         <>
