@@ -24,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#879A96" />
+        <meta name="msapplication-TileColor" content="#879A96" />
         <meta name="rant" content="we write semantic html in this house" />
       </head>
       <body className={`${ebGaramond.className} `}>

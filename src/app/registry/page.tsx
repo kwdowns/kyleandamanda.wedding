@@ -9,17 +9,12 @@ export default function Registry() {
   return (
     <MainContent>
       <h1 className="text-4xl mt-4 text-center">Registry</h1>
-      <p className="max-w-1/2 text-pretty my-4 text-lg">
+      <p className="text-pretty my-4 text-lg">
         Thank you for considering a gift for our wedding! We are registered at
-        Amazon and Target. If you are shipping a gift, please ship to our home
-        address at:{" "}
-        <address>
-          8515 Lowell Ave
-          <br />
-          Overland Park, KS 66212
-        </address>
+        the buisnesses listed below.
       </p>
-      <div className="flex flex-col space-y-8 mt-8 items-center">
+      
+      <div className="flex flex-col space-y-8 my-8 items-center">
         <RegistryLink
           displayName={"Amazon"}
           url={"https://www.amazon.com/wedding/share/kyleandamanda-wedding"}
@@ -34,6 +29,17 @@ export default function Registry() {
             "https://www.myregistry.com/wedding-registry/amanda-claywell-and-kyle-downs-overland-park-ks/4574658"
           }
         />
+      </div>
+      
+      <div className="">
+        <p className="text-pretty text-lg">
+          If you are shipping a gift, please ship to our home address at:
+        </p>
+        <address className="text-center">
+            8515 Lowell Ave
+            <br />
+            Overland Park, KS 66212
+        </address>
       </div>
     </MainContent>
   );

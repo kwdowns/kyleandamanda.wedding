@@ -75,12 +75,12 @@ function HotelSection() {
   }
 
   const HotelItem = ({ children }: HotelItemProps) => {
-    return <li className="mb-8 px-2 lg:px-4">{children}</li>;
+    return <div className="mb-8 px-2 lg:px-4">{children}</div>;
   };
 
   return (
     <TravelSection heading="Hotels">
-      <ul className="p-2 lg:p-4 w-full md:w-1/2 lg:2/3 md:mx-auto text-center">
+      <div className="p-2 lg:p-4 w-full md:w-7/12 md:mx-auto text-center">
         <HotelItem>
           <h2 className="font-semibold text-xl">
             AC Hotel Kansas City Downtown
@@ -113,7 +113,15 @@ function HotelSection() {
             />
           </div>
         </HotelItem>
-      </ul>
+        <HotelItem>
+          <h2 className="font-semibold text-xl">Hotel Phillips Kansas City, Curio Collection by Hilton</h2>
+          <address>106 W 12th Street, Kansas City, MO 64105</address>
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+            <ExternalLink href="https://www.hilton.com/en/hotels/mkccuqq-hotel-phillips-kansas-city/?SEO_id=GMB-AMER-QQ-MKCCUQQ&y_source=1_NDQ2NjAzMy03MTUtbG9jYXRpb24ud2Vic2l0ZQ%3D%3D" text="Website" />
+            <ExternalLink href="https://www.google.com/maps/search/?api=1&query=Hotel+Phillips+Kansas+City%2C+Curio+Collection+by+Hilton%2C+106+W+12th+Street+Kansas+City%2C+MO+US" text="Google Maps" />
+          </div>
+        </HotelItem>
+      </div>
     </TravelSection>
   );
 }
@@ -121,8 +129,10 @@ function HotelSection() {
 function ActivitiesSection() {
   return (
     <>
-      <TravelSection heading="Activities" className="hidden">
-        <ul></ul>
+      <TravelSection heading="Activities" className="p-2 lg:p-4 w-full md:w-1/2 lg:w-2/3 md:mx-auto text-center text-pretty text-lg hidden">
+        <ul>
+          <li></li>
+        </ul>
       </TravelSection>
     </>
   );
