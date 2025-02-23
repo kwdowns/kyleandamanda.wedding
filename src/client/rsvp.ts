@@ -37,6 +37,7 @@ export type UpdatePartyRequest = {
 };
 
 export async function getParty(rsvpCode: string): Promise<Party | null> {
+  console.log(apiBaseUrl);
   const response = await fetch(`${apiBaseUrl}/rsvp/${rsvpCode}`, {
     headers: {
       ...(apiKey ? { [apiKeyHeader]: apiKey } : {}),

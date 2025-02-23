@@ -1,10 +1,11 @@
 "use client";
 import AddToCalendar from "@/components/AddToCalendar";
 import { AttendingStatus, Party, PartyMember } from "../../client/rsvp";
-import { useId, useState, useTransition } from "react";
+import { useEffect, useId, useState, useTransition } from "react";
 import Link from "next/link";
 import * as rsvpApi from "../../client/rsvp";
 import MainContent from "@/components/MainContent";
+import Button from "@/components/Button";
 
 export interface RsvpFormProps {
   attendingStatus: AttendingStatus;
@@ -24,6 +25,7 @@ type RsvpSteps =
 
 export default function RsvpView(rsvp: RsvpFormProps | null) {
   const [isPending, startTransition] = useTransition();
+  
   const [party, setParty] = useState<Party>({
     partyCode: rsvp?.partyCode ?? "",
     attendingStatus: rsvp?.attendingStatus ?? "AwaitingResponse",
@@ -31,10 +33,34 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
     members: rsvp?.members ?? [],
     comments: rsvp?.comments ?? "",
   });
+  
   const [step, setStep] = useState<RsvpSteps>(
     rsvp && rsvp.partyCode ? "IsGuestAttending" : "EnterCode",
   );
 
+  useEffect(() => {
+    if(rsvp && rsvp.partyCode) return;
+    if(typeof window === "undefined") return;
+    const stateString = window.localStorage.getItem("rsvp");
+    if (!stateString) return;
+    const state = JSON.parse(stateString);
+
+    if("party" in state){
+      setParty(state.party);
+    }
+    if("step" in state){
+      setStep(state.step);
+    }
+  }, [rsvp])
+  
+
+  const update = (party: Party, step: RsvpSteps) => {
+    setParty(party);
+    setStep(step);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("rsvp", JSON.stringify({party, step}));
+    }
+  }
   async function submitResponse(party: Party): Promise<void> {
     await rsvpApi.updateParty({
       rsvpCode: party.partyCode,
@@ -49,7 +75,10 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
       },
     });
     return;
+  
   }
+
+  
 
   return (
     <MainContent>
@@ -86,8 +115,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
                 const rsvp = await rsvpApi.getParty(e.target.value);
                 if (rsvp !== null) {
                   console.log("found party");
-                  setParty({ ...rsvp });
-                  setStep("IsGuestAttending");
+                  update({...rsvp}, "IsGuestAttending");
                   window.history.pushState({}, "", `/rsvp/${e.target.value}`);
                 }
               }
@@ -103,22 +131,15 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
             console.log("accepting invite", party);
             if (status === "Declined") {
               startTransition(async () => {
-                setParty({ ...party, attendingStatus: status });
-                let resp = submitResponse({
+                update({...party, attendingStatus: status}, "Submitted");
+                await submitResponse({
                   ...party,
                   attendingStatus: status,
                 });
-                setStep("Declined");
-                await resp;
               });
             } else if (status === "Attending") {
               startTransition(() => {
-                setParty({ ...party, attendingStatus: status });
-                if (party.partySize > 1) {
-                  setStep("PartyMembers");
-                } else {
-                  setStep("Comments");
-                }
+                update({ ...party, attendingStatus: status }, party.partySize > 1 ? "PartyMembers" : "Comments");
               });
             }
           }}
@@ -130,8 +151,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           onSubmit={(guests: PartyMember[]) => {
             console.log("submitting additional guests", party);
             startTransition(() => {
-              setParty({ ...party, members: guests });
-              setStep("Comments");
+              update({ ...party, members: guests }, "Comments");
             });
           }}
         />
@@ -141,55 +161,41 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           invite={party}
           onSubmit={(comments: string) => {
             console.log("submitting comments", party);
-
             startTransition(async () => {
+              update({ ...party, comments: comments }, "Submitted");
               let resp = await submitResponse({
                 ...party,
                 comments: comments,
               });
-              setParty({
-                ...party,
-                comments: comments,
-              });
-              setStep("Submitted");
               await resp;
             });
           }}
         />
       )}
-      {step === "Declined" && (
+      {step === "Submitted" && party.attendingStatus === "Declined" && (
         <div>
           <p>
             Thank you for letting us know you won&apos;t be able to make it.
           </p>
           <p>We hope to see you at the next event!</p>
           <p>
-            If you change your mind use this link{" "}
-            <Link href={`/rsvp/${party.partyCode}`} /> to update your RSVP or
-            contact us directly before :TODO:rsvp-due-date:.
+            If you change your mind, you can return to this page and update your RSVP until May 9th.
           </p>
 
-          <Link href="/">Return to the homepage</Link>
+          <Button text="Edit RSVP" onClick={() => update({...party}, "IsGuestAttending")}/>
         </div>
       )}
-      {step === "Submitted" && (
+      {step === "Submitted" && party.attendingStatus === "Attending" && (
+        
         <div className="text-2xl">
           <p>Thank you for your RSVP!</p>
           <p>We can&apos;t wait to see you at the wedding!</p>
 
           <p>
-            If need to make any changes use this link{" "}
-            <Link
-              href={`/rsvp/${party.partyCode}`}
-              className="text-blue-500 hover:underline"
-            >
-              {window.location.href}
-            </Link>{" "}
-            to update your RSVP details or contact us directly before May 16th.
+            If need to make any changes you can return to this page and update your RSVP until May 9th.
           </p>
-          <Link href="/" className="text-blue-500 hover:underline">
-            Return to the homepage
-          </Link>
+
+          <Button text="Edit RSVP" onClick={() => update({...party}, "IsGuestAttending")}/>
 
           <p>Add a reminder to your calendar:</p>
           <AddToCalendar />
