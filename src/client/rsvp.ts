@@ -21,6 +21,7 @@ export type Party = {
   members: PartyMember[];
 };
 export type PartyMember = {
+  id: number;
   firstName: string | null;
   lastName: string | null;
   foodRestrictions: string | null;
@@ -70,6 +71,7 @@ export async function updateParty(request: UpdatePartyRequest): Promise<void> {
       const error = await response.json();
       throw new Error(`Failed to update RSVP: ${error.message}`);
     }
+
     throw new Error(`Failed to update RSVP: ${response.statusText}`);
   }
   console.log("updated party", request.rsvpCode);

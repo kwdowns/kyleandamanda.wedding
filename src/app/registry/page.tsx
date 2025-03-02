@@ -13,7 +13,7 @@ export default function Registry() {
         Thank you for considering a gift for our wedding! We are registered at
         the buisnesses listed below.
       </p>
-      
+
       <div className="flex flex-col space-y-8 my-8 items-center">
         <RegistryLink
           displayName={"Amazon"}
@@ -30,15 +30,15 @@ export default function Registry() {
           }
         />
       </div>
-      
+
       <div className="">
         <p className="text-pretty text-lg">
           If you are shipping a gift, please ship to our home address at:
         </p>
         <address className="text-center">
-            8515 Lowell Ave
-            <br />
-            Overland Park, KS 66212
+          8515 Lowell Ave
+          <br />
+          Overland Park, KS 66212
         </address>
       </div>
     </MainContent>

@@ -1,14 +1,8 @@
 "use client";
 import { EventAttributes, createEvent } from "ics";
+import Button from "./Button";
 export default function AddToCalendar() {
-  return (
-    <button
-      className="bg-tertiary-light text-gray-100 p-2 rounded w-fit"
-      onClick={createCalendarEvent}
-    >
-      Add to Calendar
-    </button>
-  );
+  return <Button onClick={createCalendarEvent} text="Add to Calendar" />;
 }
 
 async function createCalendarEvent() {

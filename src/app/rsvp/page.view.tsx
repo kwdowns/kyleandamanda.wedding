@@ -25,7 +25,7 @@ type RsvpSteps =
 
 export default function RsvpView(rsvp: RsvpFormProps | null) {
   const [isPending, startTransition] = useTransition();
-  
+
   const [party, setParty] = useState<Party>({
     partyCode: rsvp?.partyCode ?? "",
     attendingStatus: rsvp?.attendingStatus ?? "AwaitingResponse",
@@ -33,34 +33,34 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
     members: rsvp?.members ?? [],
     comments: rsvp?.comments ?? "",
   });
-  
+
   const [step, setStep] = useState<RsvpSteps>(
     rsvp && rsvp.partyCode ? "IsGuestAttending" : "EnterCode",
   );
 
   useEffect(() => {
-    if(rsvp && rsvp.partyCode) return;
-    if(typeof window === "undefined") return;
+    if (rsvp && rsvp.partyCode) return;
+    if (typeof window === "undefined") return;
     const stateString = window.localStorage.getItem("rsvp");
     if (!stateString) return;
     const state = JSON.parse(stateString);
 
-    if("party" in state){
+    if ("party" in state) {
       setParty(state.party);
     }
-    if("step" in state){
+    if ("step" in state) {
       setStep(state.step);
     }
-  }, [rsvp])
-  
+  }, [rsvp]);
 
   const update = (party: Party, step: RsvpSteps) => {
     setParty(party);
     setStep(step);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("rsvp", JSON.stringify({party, step}));
+      window.localStorage.setItem("rsvp", JSON.stringify({ party, step }));
     }
-  }
+  };
+
   async function submitResponse(party: Party): Promise<void> {
     await rsvpApi.updateParty({
       rsvpCode: party.partyCode,
@@ -68,6 +68,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
         attending: party.attendingStatus === "Attending",
         comments: party.comments,
         partyMembers: party.members.map((m) => ({
+          id: m.id,
           firstName: m.firstName,
           lastName: m.lastName,
           foodRestrictions: m.foodRestrictions,
@@ -75,15 +76,12 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
       },
     });
     return;
-  
   }
-
-  
 
   return (
     <MainContent>
       <h1 className="text-center mt-8 text-4xl mb-12">RSVP</h1>
-      {step !== "EnterCode" && (
+      {step !== "EnterCode" && step !== "Submitted" && (
         <button
           className="m-4 text-black text-lg bg-slate-300 rounded-lg p-2 hover:bg-slate-100"
           onClick={() => {
@@ -115,7 +113,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
                 const rsvp = await rsvpApi.getParty(e.target.value);
                 if (rsvp !== null) {
                   console.log("found party");
-                  update({...rsvp}, "IsGuestAttending");
+                  update({ ...rsvp }, "IsGuestAttending");
                   window.history.pushState({}, "", `/rsvp/${e.target.value}`);
                 }
               }
@@ -131,7 +129,7 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
             console.log("accepting invite", party);
             if (status === "Declined") {
               startTransition(async () => {
-                update({...party, attendingStatus: status}, "Submitted");
+                update({ ...party, attendingStatus: status }, "Submitted");
                 await submitResponse({
                   ...party,
                   attendingStatus: status,
@@ -139,7 +137,10 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
               });
             } else if (status === "Attending") {
               startTransition(() => {
-                update({ ...party, attendingStatus: status }, party.partySize > 1 ? "PartyMembers" : "Comments");
+                update(
+                  { ...party, attendingStatus: status },
+                  party.partySize > 1 ? "PartyMembers" : "Comments",
+                );
               });
             }
           }}
@@ -179,26 +180,39 @@ export default function RsvpView(rsvp: RsvpFormProps | null) {
           </p>
           <p>We hope to see you at the next event!</p>
           <p>
-            If you change your mind, you can return to this page and update your RSVP until May 9th.
+            If you change your mind, you can return to this page and update your
+            RSVP until May 9th.
           </p>
 
-          <Button text="Edit RSVP" onClick={() => update({...party}, "IsGuestAttending")}/>
+          <Button
+            text="Edit RSVP"
+            onClick={() => update({ ...party }, "IsGuestAttending")}
+          />
         </div>
       )}
       {step === "Submitted" && party.attendingStatus === "Attending" && (
-        
         <div className="text-2xl">
-          <p>Thank you for your RSVP!</p>
-          <p>We can&apos;t wait to see you at the wedding!</p>
+          <div className="mt-8">
+            <p>
+              Thank you for your RSVP! We can&apos;t wait to see you at the
+              wedding!
+            </p>
+          </div>
 
-          <p>
-            If need to make any changes you can return to this page and update your RSVP until May 9th.
-          </p>
+          <div className="mt-8">
+            <p>
+              If need to make any changes you can return to this page and update
+              your RSVP until May 9th.
+            </p>
+            <Button
+              text="Edit RSVP"
+              onClick={() => update({ ...party }, "IsGuestAttending")}
+            />
+          </div>
 
-          <Button text="Edit RSVP" onClick={() => update({...party}, "IsGuestAttending")}/>
-
-          <p>Add a reminder to your calendar:</p>
-          <AddToCalendar />
+          <div className="mt-8">
+            <AddToCalendar />
+          </div>
         </div>
       )}
     </MainContent>
@@ -242,8 +256,22 @@ interface IPartyMembersStepProps {
   onSubmit: (members: PartyMember[]) => void;
 }
 
+type PartyMemberInputState = {
+  member: PartyMember;
+  disabled: boolean;
+  canDisable: boolean;
+};
+
 function PartyMembersStep({ invite, onSubmit }: IPartyMembersStepProps) {
-  const [members, setMembers] = useState<PartyMember[]>(invite.members ?? []);
+  const [members, setMembers] = useState<PartyMemberInputState[]>(
+    (invite.members ?? []).map((m, i) => ({
+      member: m,
+      canDisable: i > 0,
+      disabled:
+        (m.firstName === null || m.firstName === "") &&
+        (m.lastName === null || m.lastName === ""),
+    })),
+  );
   return (
     <div className="flex flex-col">
       <p className="text-xl text-center">
@@ -269,27 +297,19 @@ function PartyMembersStep({ invite, onSubmit }: IPartyMembersStepProps) {
           />
         ))}
       </div>
-      {members.length < invite.partySize && (
-        <button
-          className="my-4 bg-secondary text-white px-4 py-2 rounded-md w-1/3 mx-auto"
-          onClick={() => {
-            setMembers([
-              ...members,
-              { firstName: null, lastName: null, foodRestrictions: null },
-            ]);
-          }}
-        >
-          Add Guest
-        </button>
-      )}
       <SubmitButton
         disabled={members.length === 0}
         onClick={() => {
           onSubmit(
-            members.filter(
-              (g) =>
-                (g.lastName ?? "").trim() !== "" &&
-                (g.firstName ?? "").trim() != "",
+            members.map((m) =>
+              m.disabled
+                ? {
+                    id: m.member.id,
+                    firstName: null,
+                    lastName: null,
+                    foodRestrictions: null,
+                  }
+                : m.member,
             ),
           );
         }}
@@ -326,79 +346,117 @@ function PartyMemberInput({
   value,
   onChange,
 }: {
-  value: PartyMember | null;
-  onChange: (member: PartyMember | null) => void;
+  value: PartyMemberInputState;
+  onChange: (member: PartyMemberInputState) => void;
 }) {
-  const [member, setCurrentValue] = useState<PartyMember>(
-    value ?? { firstName: null, lastName: null, foodRestrictions: null },
-  );
+  const [input, setCurrentValue] = useState<PartyMemberInputState>(value);
+
   return (
-    <div className="flex flex-col my-4 p-4 bg-primary-light rounded-2xl">
-      <div className="flex flex-items-center space-x-2">
-        <input
-          type="text"
-          placeholder="First Name"
-          value={member.firstName ?? ""}
-          onChange={(e) => {
-            const updatedMember = { ...member, firstName: e.target.value };
-            setCurrentValue(updatedMember);
-            onChange(updatedMember);
-          }}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={member.lastName ?? ""}
-          onChange={(e) => {
-            const updatedMember = { ...member, lastName: e.target.value };
-            setCurrentValue(updatedMember);
-            onChange(updatedMember);
-          }}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-      </div>
-      <div className="flex flex-row justify-between space-x-2">
-        <label>
-          Food Restrictions
-          <input
-            type="checkbox"
-            checked={member.foodRestrictions !== null}
-            onChange={(e) => {
-              const updatedMember = {
-                ...member,
-                foodRestrictions: e.target.checked ? "" : null,
-              };
-              setCurrentValue(updatedMember);
-              onChange(updatedMember);
-            }}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          />
-        </label>
-        <button
-          type="button"
-          onClick={() => onChange(null)}
-          className="bg-red-500 text-white px-4 py-2 rounded-md"
-        >
-          Remove
-        </button>
-      </div>
-      {member.foodRestrictions !== null && (
-        <textarea
-          placeholder="Food Restrictions"
-          value={member.foodRestrictions ?? ""}
-          onChange={(e) => {
-            const updatedMember = {
-              ...member,
-              foodRestrictions: e.target.value,
-            };
-            setCurrentValue(updatedMember);
-            onChange(updatedMember);
-          }}
-          className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
+    <>
+      {input.disabled && (
+        <>
+          <button
+            type="button"
+            onClick={() => setCurrentValue({ ...input, disabled: false })}
+            className="bg-secondary text-white px-4 py-2 rounded-md w-1/3 mx-auto"
+          >
+            Add Guest
+          </button>
+        </>
       )}
-    </div>
+
+      {!input.disabled && (
+        <div className="bg-secondary rounded-xl p-4 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+          {input.canDisable && (
+            <button
+              type="button"
+              onClick={() => {
+                const updatedMember = {
+                  member: {
+                    id: input.member.id,
+                    firstName: null,
+                    lastName: null,
+                    foodRestrictions: null,
+                  },
+                  disabled: true,
+                  canDisable: input.canDisable,
+                };
+                setCurrentValue(updatedMember);
+                onChange(updatedMember);
+              }}
+              className="bg-tertiary-dark text-white px-4 py-2 rounded-md right-0 relative"
+            >
+              Remove
+            </button>
+          )}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col ">
+              <label className="text-xl">First Name</label>
+              <input
+                className="
+              bg-gray-50 
+              border 
+              border-gray-300 
+              text-gray-900 
+              text-sm rounded-lg 
+              focus:ring-blue-500 
+              focus:border-blue-500 
+              block 
+              w-full 
+              p-2.5
+
+              "
+                type="text"
+                placeholder="First Name"
+                value={input.member.firstName ?? ""}
+                onChange={(e) => {
+                  const updatedMember = {
+                    ...input,
+                    member: { ...input.member, firstName: e.target.value },
+                  };
+                  setCurrentValue(updatedMember);
+                  onChange(updatedMember);
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-xl ">Last Name</label>
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={input.member.lastName ?? ""}
+                onChange={(e) => {
+                  const updatedMember = {
+                    ...input,
+                    member: { ...input.member, lastName: e.target.value },
+                  };
+                  setCurrentValue(updatedMember);
+                  onChange(updatedMember);
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-xl">Food Restrictions</label>
+              <textarea
+                placeholder="Food Restrictions"
+                value={input.member.foodRestrictions ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value === "" ? null : e.target.value;
+                  const updatedMember = {
+                    ...input,
+                    member: { ...input.member, foodRestrictions: value },
+                  };
+                  setCurrentValue(updatedMember);
+                  onChange(updatedMember);
+                }}
+                className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -412,7 +470,7 @@ const SubmitButton = ({
   text?: string;
 }) => (
   <button
-    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md disabled:bg-blue-900 disabled:cursor-not-allowed disabled:text-gray-500"
+    className="mt-4 bg-secondary-dark text-white px-4 py-2 rounded-md disabled:bg-blue-900 disabled:cursor-not-allowed disabled:text-gray-500"
     disabled={disabled}
     onClick={onClick}
   >

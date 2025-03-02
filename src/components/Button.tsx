@@ -1,12 +1,11 @@
-
 export interface ButtonProps<T = any> {
-    text: string;
-    onClick?: () => Promise<T> | void;
+  text: string;
+  onClick?: () => Promise<T> | void;
 }
 export default function Button<T>({ text, onClick }: ButtonProps<T>) {
-    return (
+  return (
     <button
-        className="
+      className="
           shadow-md
           visited:underline
           bg-tertiary-light
@@ -20,13 +19,13 @@ export default function Button<T>({ text, onClick }: ButtonProps<T>) {
           min-w-28
           font-semibold
         "
-        onClick={async () => {
-          if (onClick) {
-            await onClick();
-          }
-        }}
-      >
-        {text}
-      </button>
-    );
+      onClick={async () => {
+        if (onClick) {
+          await onClick();
+        }
+      }}
+    >
+      {text}
+    </button>
+  );
 }
