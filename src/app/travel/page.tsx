@@ -19,7 +19,6 @@ export default function Travel() {
           transportation options to help you plan your trip.
         </p>
         <HotelSection />
-        <ActivitiesSection />
         <RestaurantsSection />
         <BarsSection />
         <TransportationSection />
@@ -40,7 +39,9 @@ function TravelSection({ heading, className, children }: TravelSectionProps) {
       <h2 className="text-3xl font-semibold underline text-center">
         {heading}
       </h2>
-      {children}
+      <div className="p-2 lg:p-4 w-full md:w-7/12 md:mx-auto text-center">
+        {children}
+      </div>
     </section>
   );
 }
@@ -69,19 +70,18 @@ function ExternalLink({ href, text }: { href: string; text: string }) {
   );
 }
 
+interface PlaceProps {
+  children: React.ReactNode;
+}
+
+const PlaceItem = ({ children }: PlaceProps) => {
+  return <div className="mb-8 px-2 lg:px-4">{children}</div>;
+};
+
 function HotelSection() {
-  interface HotelItemProps {
-    children: React.ReactNode;
-  }
-
-  const HotelItem = ({ children }: HotelItemProps) => {
-    return <div className="mb-8 px-2 lg:px-4">{children}</div>;
-  };
-
   return (
     <TravelSection heading="Hotels">
-      <div className="p-2 lg:p-4 w-full md:w-7/12 md:mx-auto text-center">
-        <HotelItem>
+        <PlaceItem>
           <h2 className="font-semibold text-xl">
             AC Hotel Kansas City Downtown
           </h2>
@@ -96,8 +96,8 @@ function HotelSection() {
               text="Google Maps"
             />
           </div>
-        </HotelItem>
-        <HotelItem>
+        </PlaceItem>
+        <PlaceItem>
           <h2 className="font-semibold text-xl">
             Holiday Inn Kansas City - Downtown, an IHG Hotel
           </h2>
@@ -112,8 +112,8 @@ function HotelSection() {
               text="Google Maps"
             />
           </div>
-        </HotelItem>
-        <HotelItem>
+        </PlaceItem>
+        <PlaceItem>
           <h2 className="font-semibold text-xl">
             Hotel Phillips Kansas City, Curio Collection by Hilton
           </h2>
@@ -128,35 +128,94 @@ function HotelSection() {
               text="Google Maps"
             />
           </div>
-        </HotelItem>
-      </div>
+        </PlaceItem>
     </TravelSection>
   );
 }
 
-function ActivitiesSection() {
-  return (
-    <>
-      <TravelSection
-        heading="Activities"
-        className="p-2 lg:p-4 w-full md:w-1/2 lg:w-2/3 md:mx-auto text-center text-pretty text-lg hidden"
-      >
-        <ul>
-          <li></li>
-        </ul>
-      </TravelSection>
-    </>
-  );
-}
-
 function RestaurantsSection() {
-  return <></>;
+  return (
+    <TravelSection heading="Restaurants">
+        <p className="text-lg">There are a lot of great restaurants in town, and even more not in this list, but here are a few of our favorites.</p>
+        <PlaceItem>
+          <h2>KC Taco Company</h2>
+          <address>528 Walnut St, Kansas City, MO 64106</address>
+          <p>Great tacos and burritos. Featured on Diners Drive-ins and Dives. Also one of our first few dates was here. It&apos;s not too far from the venue either.</p>
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+            <ExternalLink
+              href="https://kctacocompany.com/"
+              text="Website"
+            />
+          </div>
+        </PlaceItem>
+        <PlaceItem>
+          <h2>Waldo Thai</h2>
+          <address>8431 Wornall Rd, Kansas City, MO 64114</address>
+          <p>Exquisite Thai food. Their appetizers are fantastic. It&apos;s where we went after the proposal.</p>
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+            <ExternalLink
+              href="https://www.waldothai.com/"
+              text="Website"
+            />
+          </div>
+        </PlaceItem>
+        <PlaceItem>
+          <h2>Milwaukee Delicatessen</h2>
+          <address>101 W 9th St, Kansas City, MO 64105</address>
+          <p>Sandwiches, pizza, and salads. It&apos;s a great place to grab a quick bite to eat for lunch or dinner. Right off the street car line so it&apos;s easily accessible from most anywhere downtown.</p>
+          <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+            <ExternalLink
+              href="https://https://milwaukeedelikc.com/.com/"
+              text="Website"/>
+          </div>
+        </PlaceItem>
+    </TravelSection>
+  )
 }
 
 function BarsSection() {
-  return <></>;
+  return (
+  <TravelSection heading="Bars">
+      <PlaceItem>
+        <h2>The Green Lady Lounge</h2>
+        <address>1809 Grand Blvd, Kansas City, MO 64108</address>
+        <p>Features jazz music and a speakeasy vibe. It&apos;s a great place to grab a drink and listen to some live music.</p>
+        <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+          <ExternalLink
+            href="https://greenladylounge.com/"
+            text="Website"
+          />
+        </div>
+      </PlaceItem>
+      <PlaceItem>
+        <h2>Power & Light</h2>
+        <address>50 E 13th St, Kansas City, MO 64106</address>
+        <p>Power & Light is a district in downtown Kansas City that has a variety of bars and restaurants. If you are coming from St. Louis and are familiar with Ballpark Village then this has a similar vibe.</p>
+      </PlaceItem>
+      <PlaceItem>
+        <h2>Up-Down</h2>
+        <address>101 Southwest Blvd, Kansas City, MO 64108</address>
+        <p>Barcade with a variety of arcade games and pinball machines. It get&apos;s busy on weekends fast!</p>
+        <div className="flex flex-wrap justify-center gap-4 lg:gap-12">
+          <ExternalLink
+            href="https://www.updownkc.com/"
+            text="Website"
+          />
+        </div>
+      </PlaceItem>
+  </TravelSection>
+  );
 }
 
 function TransportationSection() {
-  return <></>;
+  return (
+    <TravelSection heading="Transportation">
+        <p>Uber and Lyft will be your best option for getting around without a car.</p>
+        <p>If you are downtown there is also the steetcar, it&apos;s free and runs North-South through the center of downtown</p>
+        <ExternalLink
+          href="https://kcstreetcar.org/route/"
+          text="Streetcar Route"
+        />
+    </TravelSection>
+  );
 }
