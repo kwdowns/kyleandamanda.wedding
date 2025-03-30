@@ -29,6 +29,12 @@ export default function Registry() {
             "https://www.myregistry.com/wedding-registry/amanda-claywell-and-kyle-downs-overland-park-ks/4574658"
           }
         />
+        <RegistryLink
+          displayName="Home Improvement Fund"
+          url={
+            "https://www.paypal.com/pool/9dyBLj1Yp8?sr=wccr"
+          }
+        />
       </div>
 
       <div className="">
