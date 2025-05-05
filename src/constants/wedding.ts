@@ -4,6 +4,6 @@ export const wedding = {
   date: new Date(weddingDate),
   city: "Kansas City",
   state: "MO",
-  street: "401 Admiral Blvd",
+  street: "410 Admiral Blvd",
   zip: "64106",
 };
