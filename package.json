@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node prebuild.js && cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev": "node prebuild.js && cross-env NODE_OPTIONS='--inspect' next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,9 +14,9 @@
     "cross-env": "^7.0.3",
     "ics": "^3.7.2",
     "lightgallery": "^2.7.2",
-    "next": "^15.0.4",
-    "react": "^18",
-    "react-dom": "^18",
+    "next": "15.3.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-photo-album": "^2.4.0",
     "react-qr-code": "^2.0.15",
     "react-timeline": "^0.0.9",
@@ -28,15 +28,19 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "19.1.5",
+    "@types/react-dom": "19.1.5",
     "@types/react-vertical-timeline-component": "^3.3.6",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3",
+    "eslint-config-next": "15.3.2",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.1.7",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "19.1.5",
+    "@types/react-dom": "19.1.5"
   }
 }
