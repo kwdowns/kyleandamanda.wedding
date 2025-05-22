@@ -20,10 +20,12 @@ export function WeddingInfo() {
         <h2 className="text-2xl">When</h2>
         <div>
           <time dateTime={wedding.date.toISOString()}>
-            {wedding.date.toLocaleDateString("en-us", {
+            {wedding.date.toLocaleString("en-us", {
               month: "long",
               day: "numeric",
               year: "numeric",
+              hour: "numeric",
+              minute: "2-digit"
             })}
           </time>
           <p>{daysUntil} days to go!</p>

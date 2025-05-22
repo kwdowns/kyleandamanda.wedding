@@ -22,7 +22,7 @@ export default function Home() {
       <h2 className="text-2xl text-center py-8">We&apos;re getting Married!</h2>
       <WeddingInfo />
       <p className="mt-12 px-4 text-lg">
-        
+        We&apos;re so excited to celebrate with you! 
       </p>
       <div className="px-4">
         <h2 className="text-2xl text-center py-8">Parking</h2>

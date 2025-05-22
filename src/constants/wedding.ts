@@ -1,4 +1,4 @@
-export const weddingDate = "2025-06-14T22:00:00Z";
+export const weddingDate = "2025-06-14 17:00:00 -5:00";
 export const localStartTime = "5:00 PM";
 export const wedding = {
   date: new Date(weddingDate),

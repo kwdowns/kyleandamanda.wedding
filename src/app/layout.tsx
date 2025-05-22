@@ -28,7 +28,7 @@ export default function RootLayout({
         <meta name="rant" content="we write semantic html in this house" />
       </head>
       <body className={`${ebGaramond.className} `}>
-        <div className="bg-gradient-to-t from-secondary from-0% to-transparent to-20% vh-max bg-primary min-h-svh relative pb-80">
+        <div className="bg-linear-to-t from-secondary from-0% to-transparent to-20% vh-max bg-primary min-h-svh relative pb-80">
           <HeaderLayout />
           <main>{children}</main>
           <footer className="pb-36 mx-auto w-full absolute bottom-0 inset-x-0">

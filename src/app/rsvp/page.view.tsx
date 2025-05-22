@@ -546,7 +546,7 @@ function RadioGroup({
               <label
                 key={option.value}
                 htmlFor={inputId}
-                className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light hover:peer-checked:bg-tertiary-light"
+                className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light peer-checked:hover:bg-tertiary-light"
               >
                 <div className="block w-full text-lg font-semibold">
                   {option.label}
@@ -585,7 +585,7 @@ function RadioButton({
       />
       <label
         htmlFor={inputId}
-        className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light hover:peer-checked:bg-tertiary-light"
+        className="inline-flex items-center justify-between w-full p-5 text-gray-400 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:bg-tertiary peer-checked:border-white peer-checked:text-white hover:text-gray-800 hover:bg-tertiary-light peer-checked:hover:bg-tertiary-light"
       >
         <div className="block w-full text-lg font-semibold">{label}</div>
       </label>

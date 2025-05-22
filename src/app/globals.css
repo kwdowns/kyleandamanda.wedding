@@ -1,14 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+
+  --color-primary-light: #598388;
+  --color-primary: #45666a;
+  --color-primary-dark: #385356;
+
+  --color-secondary-light: #7194ad;
+  --color-secondary: #577d98;
+  --color-secondary-dark: #4a6b82;
+
+  --color-tertiary-light: #527c9d;
+  --color-tertiary: #45617c;
+  --color-tertiary-dark: #3b5268;
+
+  --color-accent-light: #a6b5b2;
+  --color-accent: #879a96;
+  --color-accent-dark: #7a908b;
+
+  --color-compliment-light: #619475;
+  --color-compliment: #4b735b;
+  --color-compliment-dark: #40634e;
 }
 
-/* @media (prefers-color-scheme: dark) {
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@layer utilities {
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  /* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
@@ -16,18 +65,13 @@
   }
 } */
 
-body {
-  color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(
+  body {
+    color: rgb(var(--foreground-rgb));
+    /* background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
   }
 }
