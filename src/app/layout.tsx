@@ -49,7 +49,7 @@ const NavBarLayout = () => {
       <Link href="/">
         <Image src={siteIcon} alt="" width={40} />
       </Link>
-      <Link href="/rsvp" className="bg-secondary p-2 rounded-md">
+      <Link href="/rsvp">
         RSVP
       </Link>
       {/* <Link href="/wedding-party">Wedding Party</Link> */}
