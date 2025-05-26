@@ -31,9 +31,7 @@ export default function Registry() {
         />
         <RegistryLink
           displayName="Home Improvement Fund"
-          url={
-            "https://www.paypal.com/pool/9dyBLj1Yp8?sr=wccr"
-          }
+          url={"https://www.paypal.com/pool/9dyBLj1Yp8?sr=wccr"}
         />
       </div>
 

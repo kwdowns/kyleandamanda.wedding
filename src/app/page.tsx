@@ -19,11 +19,8 @@ export default function Home() {
         priority={true}
       />
       <h1 className="text-center text-4xl font-light py-8">Kyle & Amanda</h1>
-      <h2 className="text-2xl text-center py-8">We&apos;re getting Married!</h2>
       <WeddingInfo />
-      <p className="mt-12 px-4 text-lg">
-        We&apos;re so excited to celebrate with you! 
-      </p>
+      
       <div className="px-4">
         <h2 className="text-2xl text-center py-8">Parking</h2>
         <Image alt="Parking Map" className="w-full" src={parkingImage} />

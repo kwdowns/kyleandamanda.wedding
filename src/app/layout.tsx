@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, EB_Garamond } from "next/font/google";
-import Link from "next/link";
-import Image from "next/image";
+import { EB_Garamond } from "next/font/google";
 import "./globals.css";
-import siteIcon from "@/../public/icon.png";
 import { Analytics } from "@vercel/analytics/react";
+import { NavBarLayout } from "@/components/NavBar";
 
-const inter = Inter({ subsets: ["latin"] });
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,6 +17,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <head>
@@ -39,42 +38,25 @@ export default function RootLayout({
       </body>
     </html>
   );
+
+  
+
+  function HeaderLayout() {
+    return (
+      <header className="bg-accent px-auto py-5">
+        <NavBarLayout />
+      </header>
+    );
+  }
+
+  function KandAFooter() {
+    return (
+      <div className="text-center mx-auto my-4 w-fit text-black">
+        <div className="text-4xl">K & A</div>
+        <div className="text-xl border-t-2 border-t-black">6 . 14 . 2025</div>
+      </div>
+    );
+  }
+
+
 }
-
-const NavBarLayout = () => {
-  return (
-    <nav
-      className={`flex justify-around ${inter.className} text-black items-center`}
-    >
-      <Link href="/">
-        <Image src={siteIcon} alt="" width={40} />
-      </Link>
-      <Link href="/rsvp">
-        RSVP
-      </Link>
-      {/* <Link href="/wedding-party">Wedding Party</Link> */}
-      {/* <Link href="/events">Events</Link> */}
-      <Link href="/travel">Travel</Link>
-      <Link href="/registry">Gift Registry</Link>
-      <Link href="/faq">FAQ</Link>
-      <Link href="/gallery">Gallery</Link>
-    </nav>
-  );
-};
-
-const HeaderLayout = () => {
-  return (
-    <header className="bg-accent px-auto py-5">
-      <NavBarLayout />
-    </header>
-  );
-};
-
-const KandAFooter = () => {
-  return (
-    <div className="text-center mx-auto my-4 w-fit text-black">
-      <div className="text-4xl">K & A</div>
-      <div className="text-xl border-t-2 border-t-black">6 . 14 . 2025</div>
-    </div>
-  );
-};
