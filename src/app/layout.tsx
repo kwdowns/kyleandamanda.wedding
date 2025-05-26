@@ -17,8 +17,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
   return (
     <html lang="en">
       <head>
@@ -39,8 +37,6 @@ export default function RootLayout({
     </html>
   );
 
-  
-
   function HeaderLayout() {
     return (
       <header className="bg-accent px-auto py-5">
@@ -57,6 +53,4 @@ export default function RootLayout({
       </div>
     );
   }
-
-
 }

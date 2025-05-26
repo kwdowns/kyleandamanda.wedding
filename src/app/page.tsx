@@ -20,7 +20,7 @@ export default function Home() {
       />
       <h1 className="text-center text-4xl font-light py-8">Kyle & Amanda</h1>
       <WeddingInfo />
-      
+
       <div className="px-4">
         <h2 className="text-2xl text-center py-8">Parking</h2>
         <Image alt="Parking Map" className="w-full" src={parkingImage} />
