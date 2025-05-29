@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export function NavBarLayout() {
   const [daysUntil, setDaysUntil] = useState(getDaysUntil());
+  const [showRsvp, setShowRsvp] = useState(daysUntil > 20);
   useEffect(() => {
     const interval = setInterval(() => {
       const newDaysUntil = getDaysUntil();
@@ -20,6 +21,11 @@ export function NavBarLayout() {
     }, 1000);
     return () => clearInterval(interval);
   });
+  useEffect(() => {
+    const hasRsvp = hasRsvpSaved();
+    setShowRsvp(daysUntil > 0 && (hasRsvp || daysUntil > 25))
+  }, [daysUntil])
+
   return (
     <nav
       className={`flex justify-around ${inter.className} text-black items-center`}
@@ -27,7 +33,7 @@ export function NavBarLayout() {
       <Link href="/">
         <Image src={siteIcon} alt="" width={40} />
       </Link>
-      {((daysUntil > 25 || window.localStorage.getItem("rsvp") !== null) && daysUntil > 0) && <Link href="/rsvp">RSVP</Link>}
+      {((daysUntil > 25 || showRsvp) && daysUntil > 0) && <Link href="/rsvp">RSVP</Link>}
       {daysUntil > -7 && (
         <>
           <Link href="/travel">Travel</Link>
@@ -49,4 +55,18 @@ function getDaysUntil() {
     (weddingDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
   );
   return days;
+}
+
+function hasRsvpSaved(){
+  
+    if (typeof window === "undefined") return false;
+    const stateString = window.localStorage.getItem("rsvp");
+    if (!stateString) return false;
+    const state = JSON.parse(stateString);
+
+    if ("party" in state) {
+      return true;
+    }
+
+    return false;
 }
