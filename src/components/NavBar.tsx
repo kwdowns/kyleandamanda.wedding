@@ -27,8 +27,8 @@ export function NavBarLayout() {
       <Link href="/">
         <Image src={siteIcon} alt="" width={40} />
       </Link>
-      {daysUntil > 25 && <Link href="/rsvp">RSVP</Link>}
-      {daysUntil >= 0 && (
+      {((daysUntil > 25 || window.localStorage.getItem("rsvp") !== null) && daysUntil > 0) && <Link href="/rsvp">RSVP</Link>}
+      {daysUntil > -7 && (
         <>
           <Link href="/travel">Travel</Link>
           <Link href="/registry">Gift Registry</Link>
