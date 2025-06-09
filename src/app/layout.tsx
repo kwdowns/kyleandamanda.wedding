@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { NavBarLayout } from "@/components/NavBar";
 import { VercelToolbar } from '@vercel/toolbar/next';
+import { images } from "@/data/galleryImages";
 
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 

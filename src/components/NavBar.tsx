@@ -7,9 +7,9 @@ import { rsvpFlag, travelFlag } from "../flags";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export async function NavBarLayout() {
-  const rsvpEnabled = await rsvpFlag();
-  const travelEnabled = await travelFlag();
+export  function NavBarLayout() {
+  const rsvpEnabled = rsvpFlag;
+  const travelEnabled = travelFlag;
   return (
     <nav
       className={`flex justify-around ${inter.className} text-black items-center`}

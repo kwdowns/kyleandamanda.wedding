@@ -1,22 +1,8 @@
 import { flag } from 'flags/next';
 import { wedding } from './constants/wedding';
-export const rsvpFlag = flag({
-    key: 'rsvp',
-    defaultValue: false,
-    description: 'Enable RSVP functionality',
-    decide: () => {
-        return getDaysUntil() > 25;
-    }
-})
 
-export const travelFlag = flag({
-    key: 'travel',
-    defaultValue: false,
-    description: 'Enable travel information',
-    decide: () => {
-        return getDaysUntil() >= -5;
-    }
-})
+export const rsvpFlag =  getDaysUntil() > 25;
+export const travelFlag = getDaysUntil() >= -5;
 
 function getDaysUntil() {
   const weddingDate = new Date(wedding.date);
