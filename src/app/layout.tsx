@@ -49,9 +49,9 @@ const NavBarLayout = () => {
       <Link href="/">
         <Image src={siteIcon} alt="" width={40} />
       </Link>
-      <Link href="/rsvp">
+      {/* <Link href="/rsvp">
         RSVP
-      </Link>
+      </Link> */}
       {/* <Link href="/wedding-party">Wedding Party</Link> */}
       {/* <Link href="/events">Events</Link> */}
       <Link href="/travel">Travel</Link>
