@@ -11,7 +11,9 @@
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.0.10",
+    "@vercel/toolbar": "^0.1.37",
     "cross-env": "^7.0.3",
+    "flags": "^4.0.1",
     "ics": "^3.7.2",
     "lightgallery": "^2.7.2",
     "next": "15.3.2",

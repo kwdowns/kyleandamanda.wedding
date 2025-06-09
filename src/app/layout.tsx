@@ -3,6 +3,7 @@ import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { NavBarLayout } from "@/components/NavBar";
+import { VercelToolbar } from '@vercel/toolbar/next';
 
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const shouldInjectToolbar = process.env.NODE_ENV === 'development';
   return (
     <html lang="en">
       <head>
@@ -33,6 +35,7 @@ export default function RootLayout({
           </footer>
           <Analytics />
         </div>
+        {shouldInjectToolbar && <VercelToolbar />}
       </body>
     </html>
   );
