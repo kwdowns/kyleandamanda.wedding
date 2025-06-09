@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { NavBarLayout } from "@/components/NavBar";
+import Image, { StaticImageData } from "next/image";
 import { VercelToolbar } from '@vercel/toolbar/next';
 import { images } from "@/data/galleryImages";
-
+import Link from "next/link";
+import siteIcon from "@/../public/icon.png";
+import { Inter } from "next/font/google";
+const inter = Inter({
+  subsets: ["latin"]
+});
 const ebGaramond = EB_Garamond({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -42,9 +47,22 @@ export default function RootLayout({
   );
 
   function HeaderLayout() {
+    const rsvpEnabled = false;
+    const travelEnabled = true;
     return (
       <header className="bg-accent px-auto py-5">
-        <NavBarLayout />
+        <nav
+          className={`flex justify-around ${inter.className} text-black items-center`}
+        >
+          <Link href="/">
+            <Image src={siteIcon} alt="" width={40} />
+          </Link>
+          {rsvpEnabled && <Link href="/rsvp">RSVP</Link>}
+          {travelEnabled && <Link href="/travel">Travel</Link>}
+          {travelEnabled && <Link href="/registry">Registry</Link>}
+          {travelEnabled && <Link href="/faq">FAQ</Link>}
+          <Link href="/gallery">Gallery</Link>
+        </nav>
       </header>
     );
   }
